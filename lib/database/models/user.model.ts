@@ -8,17 +8,32 @@ interface IUser extends Document {
   firstName: string;
   lastName: string;
   photo: string;
+  fullName(): string;
+}
+
+// Interface for static methods
+interface IUserModel extends Model<IUser> {
+  findByEmail(email: string): Promise<IUser | null>;
 }
 
 // User schema definition
 const UserSchema = new Schema<IUser>(
   {
     clerkId: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true, match: [/.+\@.+\..+/, 'Please fill a valid email address'] },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      match: [/.+\@.+\..+/, 'Please fill a valid email address']
+    },
     username: { type: String, required: true, unique: true, trim: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    photo: { type: String, required: true, match: [/^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/, 'Please fill a valid URL for the photo'] },
+    photo: {
+      type: String,
+      required: true,
+      match: [/^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/, 'Please fill a valid URL for the photo']
+    },
   },
   {
     timestamps: true,
@@ -30,14 +45,14 @@ const UserSchema = new Schema<IUser>(
 UserSchema.index({ email: 1 });
 UserSchema.index({ username: 1 });
 
-// Pre-save middleware (optional): You can add hooks for validation, logging, etc.
+// Pre-save middleware (optional)
 UserSchema.pre<IUser>('save', function (next) {
   // Example: Add custom logic before saving
   next();
 });
 
 // Static methods
-UserSchema.statics.findByEmail = function (email: string) {
+UserSchema.statics.findByEmail = async function (email: string) {
   return this.findOne({ email });
 };
 
@@ -47,6 +62,6 @@ UserSchema.methods.fullName = function () {
 };
 
 // Define User model
-const User: Model<IUser> = models.User || model<IUser>('User', UserSchema);
+const User: IUserModel = models.User || model<IUser, IUserModel>('User', UserSchema);
 
 export default User;
