@@ -8,10 +8,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 type SearchProps = {
   placeholder?: string;
+  initialQuery?: string;
 };
 
-const Search = ({ placeholder = 'Search title...' }: SearchProps) => {
-  const [query, setQuery] = useState('');
+const Search = ({ placeholder = 'Search title...', initialQuery = '' }: SearchProps) => {
+  const [query, setQuery] = useState(initialQuery);
   const router = useRouter();
   const searchParams = useSearchParams();
 

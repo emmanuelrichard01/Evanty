@@ -134,9 +134,11 @@ export interface RemoveUrlQueryParams {
 }
 
 export interface SearchParamProps {
-  page(page: any): unknown;
-  category: string;
-  query: string;
   params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: {
+    page?: string;
+    query?: string;
+    category?: string;
+    [key: string]: string | string[] | undefined;
+  };
 }

@@ -13,8 +13,13 @@ import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const CategoryFilter = () => {
+type CategoryFilterProps = {
+  initialCategory?: string;
+};
+
+const CategoryFilter = ({ initialCategory = 'All' }: CategoryFilterProps) => {
   const [categories, setCategories] = useState<ICategory[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -30,6 +35,7 @@ const CategoryFilter = () => {
   }, []);
 
   const onSelectCategory = (category: string) => {
+    setSelectedCategory(category);
     const newUrl = category && category !== 'All'
       ? formUrlQuery({ params: searchParams.toString(), key: 'category', value: category })
       : removeKeysFromQuery({ params: searchParams.toString(), keysToRemove: ['category'] });
@@ -38,14 +44,18 @@ const CategoryFilter = () => {
   };
 
   return (
-    <Select onValueChange={onSelectCategory} defaultValue="All">
+    <Select onValueChange={onSelectCategory} value={selectedCategory}>
       <SelectTrigger className="select-field">
         <SelectValue placeholder="Category" />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="All" className="select-item p-regular-14">All</SelectItem>
         {categories.map((category) => (
-          <SelectItem value={category.name} key={category._id} className="select-item p-regular-14">
+          <SelectItem
+            value={category.name}
+            key={category._id as string} // Explicitly typing key as string
+            className="select-item p-regular-14"
+          >
             {category.name}
           </SelectItem>
         ))}
