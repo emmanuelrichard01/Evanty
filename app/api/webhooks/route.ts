@@ -78,6 +78,7 @@ export async function POST(req: Request) {
         }
 
         return NextResponse.json({ message: 'OK', user: newUser })
+        console.log('CreateUser Successful userId:', evt.data.id)
     }
 
     if (eventType === 'user.updated') {
@@ -93,6 +94,7 @@ export async function POST(req: Request) {
         const updatedUser = await updateUser(id, user)
 
         return NextResponse.json({ message: 'OK', user: updatedUser })
+        console.log('UpdateUser Successful userId:', evt.data.id)
     }
 
     if (eventType === 'user.deleted') {
@@ -104,4 +106,5 @@ export async function POST(req: Request) {
     }
 
     return new Response('', { status: 200 })
+    console.log('DeleteUser Successful userId:', evt.data.id)
 }
