@@ -1,16 +1,16 @@
 // ====== USER TYPES
 export interface CreateUserParams {
   clerkId: string;
-  firstName: string;
-  lastName: string;
+  firstName: string | null;
+  lastName: string | null;
   username: string;
   email: string;
   photo: string;
 }
 
 export interface UpdateUserParams {
-  firstName: string;
-  lastName: string;
+  firstName: string | null;
+  lastName: string | null;
   username: string;
   photo: string;
 }
