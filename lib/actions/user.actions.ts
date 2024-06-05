@@ -7,6 +7,7 @@ import Order from '@/lib/database/models/order.model';
 import Event from '@/lib/database/models/event.model';
 import { handleError } from '@/lib/utils';
 import { CreateUserParams, UpdateUserParams } from '@/types';
+import { Types } from 'mongoose';
 
 // Utility function to handle database connection
 async function withDatabaseConnection<T>(fn: () => Promise<T>): Promise<T> {

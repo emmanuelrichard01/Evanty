@@ -2,7 +2,6 @@ import { Schema, model, models, Document, Model, Types } from 'mongoose';
 import { IEvent } from './event.model';
 import { IOrder } from './order.model';
 
-const userId = new Types.ObjectId(user.userId);
 // Interface for the User document
 export interface IUser extends Document {
   clerkId: string;
