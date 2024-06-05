@@ -23,7 +23,7 @@ async function withDatabaseConnection<T>(fn: () => Promise<T>): Promise<T> {
 export async function createUser(user: CreateUserParams): Promise<IUser | null> {
   return withDatabaseConnection(async () => {
     const newUser = await User.create(user);
-    return newUser.toObject();
+    return JSON.parse(JSON.stringify(newUser));
   });
 }
 
@@ -32,7 +32,7 @@ export async function getUserById(userId: string): Promise<IUser | null> {
   return withDatabaseConnection(async () => {
     const user = await User.findById(userId).exec();
     if (!user) throw new Error('User not found');
-    return user.toObject();
+    return JSON.parse(JSON.stringify(user));
   });
 }
 
@@ -41,7 +41,7 @@ export async function updateUser(clerkId: string, user: UpdateUserParams): Promi
   return withDatabaseConnection(async () => {
     const updatedUser = await User.findOneAndUpdate({ clerkId }, user, { new: true }).exec();
     if (!updatedUser) throw new Error('User update failed');
-    return updatedUser.toObject();
+    return JSON.parse(JSON.stringify(updatedUser));
   });
 }
 
@@ -62,6 +62,6 @@ export async function deleteUser(clerkId: string): Promise<IUser | null> {
 
     const deletedUser = await User.findByIdAndDelete(userToDelete._id).exec();
     revalidatePath('/');
-    return deletedUser ? deletedUser.toObject() : null;
+    return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null
   });
 }
