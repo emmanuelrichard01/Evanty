@@ -1,4 +1,4 @@
-'use server'
+'use server';
 
 import { revalidatePath } from 'next/cache';
 import { connectToDatabase } from '@/lib/database';
@@ -54,10 +54,10 @@ export async function deleteUser(clerkId: string): Promise<IUser | null> {
     // Unlink relationships
     await Promise.all([
       Event.updateMany(
-        { _id: { $in: userToDelete.events } },
+        { _id: { $in: userToDelete.events } }, // No error here now
         { $pull: { organizer: userToDelete._id } }
       ).exec(),
-      Order.updateMany({ _id: { $in: userToDelete.orders } }, { $unset: { buyer: 1 } }).exec(),
+      Order.updateMany({ _id: { $in: userToDelete.orders } }, { $unset: { buyer: 1 } }).exec(), // No error here now
     ]);
 
     const deletedUser = await User.findByIdAndDelete(userToDelete._id).exec();
