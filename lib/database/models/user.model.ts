@@ -1,6 +1,6 @@
 import { Schema, model, models, Document, Model, Types } from 'mongoose';
-import { IEvent } from './event.model'; // Assuming you have an IEvent interface
-import { IOrder } from './order.model'; // Assuming you have an IOrder interface
+import { IEvent } from './event.model';
+import { IOrder } from './order.model';
 
 // Interface for the User document
 export interface IUser extends Document {
@@ -15,10 +15,6 @@ export interface IUser extends Document {
   fullName(): string;
 }
 
-// Interface for static methods
-export interface IUserModel extends Model<IUser> {
-  findByEmail(email: string): Promise<IUser | null>;
-}
 
 // User schema definition
 const UserSchema = new Schema<IUser>(
@@ -68,6 +64,6 @@ UserSchema.methods.fullName = function () {
 };
 
 // Define User model
-const User: IUserModel = models.User || model<IUser, IUserModel>('User', UserSchema) as IUserModel;
+const User = models.User || model<IUser>('User', UserSchema);
 
 export default User;
