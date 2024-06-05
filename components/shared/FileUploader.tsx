@@ -10,10 +10,10 @@ type FileWithPath = File & { path?: string };
 
 type FileUploaderProps = {
   imageUrl: string;
-  onImageChange: (url: string) => void;
+  onFieldChange: (url: string) => void;
 };
 
-export function FileUploader({ imageUrl, onImageChange }: FileUploaderProps) {
+export function FileUploader({ imageUrl, onFieldChange }: FileUploaderProps) {
   const [files, setFiles] = useState<File[]>([]);
   const [previewUrl, setPreviewUrl] = useState(imageUrl);
 
@@ -21,8 +21,8 @@ export function FileUploader({ imageUrl, onImageChange }: FileUploaderProps) {
     setFiles(acceptedFiles);
     const url = convertFileToUrl(acceptedFiles[0]);
     setPreviewUrl(url);
-    onImageChange(url);
-  }, [onImageChange]);
+    onFieldChange(url);
+  }, [onFieldChange]);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
