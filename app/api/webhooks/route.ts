@@ -1,13 +1,10 @@
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
-import { createUser, deleteUser, updateUser } from '@/lib/actions/user.actions'
-import { NextResponse } from 'next/server'
-import { clerkClient } from '@clerk/nextjs/server'
 
 export async function POST(req: Request) {
 
-    // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
+    // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
     const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET
 
     if (!WEBHOOK_SECRET) {
@@ -50,8 +47,7 @@ export async function POST(req: Request) {
         })
     }
 
-    // Do something with the payload
-    // For this guide, you simply log the payload to the console
+    // Get the ID and type
     const { id } = evt.data;
     const eventType = evt.type;
 
@@ -106,5 +102,4 @@ export async function POST(req: Request) {
     }
 
     return new Response('', { status: 200 })
-    console.log('DeleteUser Successful userId:', evt.data.id)
 }
