@@ -8,7 +8,12 @@ import { checkoutOrder } from '@/lib/actions/order.actions';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
-const Checkout = ({ event, userId }: { event: IEvent; userId: string }) => {
+interface CheckoutProps {
+  event: IEvent;
+  userId: string;
+}
+
+const Checkout: React.FC<CheckoutProps> = ({ event, userId }) => {
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     if (query.get('success')) {
@@ -20,8 +25,8 @@ const Checkout = ({ event, userId }: { event: IEvent; userId: string }) => {
     }
   }, []);
 
-  const onCheckout = async (event: React.FormEvent) => {
-    event.preventDefault();
+  const onCheckout = async (e: React.FormEvent) => {
+    e.preventDefault();
     const order = {
       eventTitle: event.title,
       eventId: event._id,
