@@ -11,7 +11,8 @@ export default authMiddleware({
     ignoredRoutes: [
         '/api/webhook/clerk',
         '/api/webhook/stripe',
-        '/api/uploadthing', ["/api/webhooks(.*)"],
+        '/api/uploadthing',
+        '/api/webhooks(.*)'
     ]
 });
 
