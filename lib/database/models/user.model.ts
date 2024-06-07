@@ -1,6 +1,4 @@
 import { Schema, model, models, Document, Model, Types } from 'mongoose';
-import { IEvent } from './event.model';
-import { IOrder } from './order.model';
 
 // Interface for the User document
 export interface IUser extends Document {
