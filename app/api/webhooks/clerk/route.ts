@@ -6,16 +6,15 @@ import { clerkClient } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
-    const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+    const WEBHOOK_SECRET: string = process.env.WEBHOOK_SECRET || "whsec_/0MZTdoL08n1SCVmSLeqNE+zAH2zKBEn";
 
     if (!WEBHOOK_SECRET) {
         throw new Error('Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local');
     }
 
-    const headerPayload = headers();
-    const svix_id = headerPayload.get("svix-id");
-    const svix_timestamp = headerPayload.get("svix-timestamp");
-    const svix_signature = headerPayload.get("svix-signature");
+    const svix_id = req.headers.get("svix-id") ?? "";
+    const svix_timestamp = req.headers.get("svix-timestamp") ?? "";
+    const svix_signature = req.headers.get("svix-signature") ?? "";
 
     if (!svix_id || !svix_timestamp || !svix_signature) {
         return new Response('Error occurred -- no svix headers', {
@@ -23,7 +22,7 @@ export async function POST(req: Request) {
         });
     }
 
-    const payload = await req.json();
+    const payload = await req.text();
     const body = JSON.stringify(payload);
 
     const wh = new Webhook(WEBHOOK_SECRET);
