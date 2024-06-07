@@ -46,4 +46,4 @@ export const connectToDatabase = async (): Promise<Connection> => {
     }
 
     return cached.conn;
-}
+};

@@ -3,20 +3,11 @@ import { Schema, model, models } from 'mongoose';
 const UserSchema = new Schema(
   {
     clerkId: { type: String, required: true, unique: true },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-      match: [/.+\@.+\..+/, 'Please fill a valid email address'],
-    },
-    username: { type: String, required: true, unique: true, trim: true },
+    email: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    photo: {
-      type: String,
-      required: true,
-      match: [/^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/, 'Please fill a valid URL for the photo'],
-    },
+    photo: { type: String, required: true },
   },
   {
     timestamps: true,
