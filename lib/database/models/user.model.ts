@@ -1,7 +1,8 @@
-import { Schema, model, models, Document, Model, Types } from 'mongoose';
+import { Schema, model, models, Document } from 'mongoose';
 
 // Interface for the User document
 export interface IUser extends Document {
+  _id: string;
   clerkId: string;
   email: string;
   username: string;
@@ -32,14 +33,8 @@ const UserSchema = new Schema<IUser>(
   },
   {
     timestamps: true,
-    versionKey: false, // Optional: Disable __v field
   }
 );
-
-// Add indexes
-UserSchema.index({ email: 1 });
-UserSchema.index({ username: 1 });
-
 
 // Define User model
 const User = models.User || model<IUser>('User', UserSchema);
