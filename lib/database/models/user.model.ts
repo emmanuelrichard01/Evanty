@@ -10,9 +10,6 @@ export interface IUser extends Document {
   firstName: string;
   lastName: string;
   photo: string;
-  events: Types.ObjectId[] | IEvent[]; // Add events property
-  orders: Types.ObjectId[] | IOrder[]; // Add orders property
-  fullName(): string;
 }
 
 
@@ -34,8 +31,6 @@ const UserSchema = new Schema<IUser>(
       required: true,
       match: [/^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/, 'Please fill a valid URL for the photo'],
     },
-    events: [{ type: Types.ObjectId, ref: 'Event' }], // Define events as an array of ObjectIds referencing Event
-    orders: [{ type: Types.ObjectId, ref: 'Order' }], // Define orders as an array of ObjectIds referencing Order
   },
   {
     timestamps: true,
@@ -47,21 +42,6 @@ const UserSchema = new Schema<IUser>(
 UserSchema.index({ email: 1 });
 UserSchema.index({ username: 1 });
 
-// Pre-save middleware (optional)
-// UserSchema.pre<IUser>('save', function (next) {
-//    'Example: Add custom logic before saving'
-//   next();
-// });
-
-// Static methods
-// UserSchema.statics.findByEmail = async function (email: string): Promise<IUser | null> {
-//   return this.findOne({ email });
-// };
-
-// Instance methods
-UserSchema.methods.fullName = function () {
-  return `${this.firstName} ${this.lastName}`;
-};
 
 // Define User model
 const User = models.User || model<IUser>('User', UserSchema);

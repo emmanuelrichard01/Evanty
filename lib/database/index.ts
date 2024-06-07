@@ -6,18 +6,15 @@ if (!MONGODB_URI) {
     throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
 }
 
-// Global cache object to store the connection
 interface Cached {
     conn: Connection | null;
     promise: Promise<Connection> | null;
 }
 
 declare global {
-    // eslint-disable-next-line no-var
     var mongooseCache: Cached;
 }
 
-// Initialize cache
 global.mongooseCache = global.mongooseCache || { conn: null, promise: null };
 
 const cached = global.mongooseCache;
@@ -36,6 +33,7 @@ export const connectToDatabase = async (): Promise<Connection> => {
             return mongoose.connection;
         }).catch(err => {
             console.error('Failed to connect to MongoDB', err);
+            cached.promise = null;
             throw err;
         });
     }
