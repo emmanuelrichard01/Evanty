@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { connectToDatabase } from '@/lib/database';
-import User, { IUser } from '@/lib/database/models/user.model';
+import User from '@/lib/database/models/user.model';
 import Order from '@/lib/database/models/order.model';
 import Event from '@/lib/database/models/event.model';
 import { handleError } from '@/lib/utils';
@@ -20,7 +20,7 @@ async function withDatabaseConnection<T>(fn: () => Promise<T>): Promise<T> {
 }
 
 // Create a new user
-export async function createUser(user: CreateUserParams): Promise<IUser | null> {
+export async function createUser(user: CreateUserParams) {
   return withDatabaseConnection(async () => {
     const newUser = await User.create(user);
     return JSON.parse(JSON.stringify(newUser));
@@ -28,7 +28,7 @@ export async function createUser(user: CreateUserParams): Promise<IUser | null> 
 }
 
 // Get user by ID
-export async function getUserById(userId: string): Promise<IUser | null> {
+export async function getUserById(userId: string) {
   return withDatabaseConnection(async () => {
     const user = await User.findById(userId).exec();
     if (!user) throw new Error('User not found');
@@ -37,7 +37,7 @@ export async function getUserById(userId: string): Promise<IUser | null> {
 }
 
 // Update user by clerk ID
-export async function updateUser(clerkId: string, user: UpdateUserParams): Promise<IUser | null> {
+export async function updateUser(clerkId: string, user: UpdateUserParams) {
   return withDatabaseConnection(async () => {
     const updatedUser = await User.findOneAndUpdate({ clerkId }, user, { new: true }).exec();
     if (!updatedUser) throw new Error('User update failed');
@@ -46,7 +46,7 @@ export async function updateUser(clerkId: string, user: UpdateUserParams): Promi
 }
 
 // Delete user by clerk ID
-export async function deleteUser(clerkId: string): Promise<IUser | null> {
+export async function deleteUser(clerkId: string) {
   return withDatabaseConnection(async () => {
     const userToDelete = await User.findOne({ clerkId }).exec();
     if (!userToDelete) throw new Error('User not found');
