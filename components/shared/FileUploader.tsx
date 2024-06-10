@@ -1,52 +1,41 @@
-'use client';
+'use client'
 
-import { useCallback, useState, useEffect } from 'react';
-import { useDropzone } from '@uploadthing/react/hooks';
-import { generateClientDropzoneAccept } from 'uploadthing/client';
-import { Button } from '@/components/ui/button';
-import { convertFileToUrl } from '@/lib/utils';
+import { useCallback, Dispatch, SetStateAction } from 'react'
+import { FileWithPath } from 'react-dropzone';
+import { useDropzone } from '@uploadthing/react/hooks'
+import { generateClientDropzoneAccept } from 'uploadthing/client'
 
-type FileWithPath = File & { path?: string };
+import { Button } from '@/components/ui/button'
+import { convertFileToUrl } from '@/lib/utils'
 
 type FileUploaderProps = {
-  imageUrl: string;
-  onFieldChange: (url: string) => void;
-};
+  onFieldChange: (url: string) => void
+  imageUrl: string
+  setFiles: Dispatch<SetStateAction<File[]>>
+}
 
-export function FileUploader({ imageUrl, onFieldChange }: FileUploaderProps) {
-  const [files, setFiles] = useState<File[]>([]);
-  const [previewUrl, setPreviewUrl] = useState(imageUrl);
-
+export function FileUploader({ imageUrl, onFieldChange, setFiles }: FileUploaderProps) {
   const onDrop = useCallback((acceptedFiles: FileWithPath[]) => {
-    setFiles(acceptedFiles);
-    const url = convertFileToUrl(acceptedFiles[0]);
-    setPreviewUrl(url);
-    onFieldChange(url);
-  }, [onFieldChange]);
+    setFiles(acceptedFiles)
+    onFieldChange(convertFileToUrl(acceptedFiles[0]))
+  }, [])
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: generateClientDropzoneAccept(['image/*']),
-  });
-
-  useEffect(() => {
-    if (imageUrl) {
-      setPreviewUrl(imageUrl);
-    }
-  }, [imageUrl]);
+    accept: 'image/*' ? generateClientDropzoneAccept(['image/*']) : undefined,
+  })
 
   return (
     <div
       {...getRootProps()}
-      className="flex-center bg-dark-3 flex h-72 cursor-pointer flex-col overflow-hidden rounded-xl bg-grey-50"
-    >
+      className="flex-center bg-dark-3 flex h-72 cursor-pointer flex-col overflow-hidden rounded-xl bg-grey-50">
       <input {...getInputProps()} className="cursor-pointer" />
 
-      {previewUrl ? (
-        <div className="flex h-full w-full flex-1 justify-center">
+      {imageUrl ? (
+        <div className="flex h-full w-full flex-1 justify-center ">
           <img
-            src={previewUrl}
-            alt="uploaded file"
+            src={imageUrl}
+            alt="image"
             width={250}
             height={250}
             className="w-full object-cover object-center"
@@ -63,5 +52,5 @@ export function FileUploader({ imageUrl, onFieldChange }: FileUploaderProps) {
         </div>
       )}
     </div>
-  );
+  )
 }
