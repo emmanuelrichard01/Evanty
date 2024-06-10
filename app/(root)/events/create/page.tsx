@@ -1,47 +1,10 @@
-"use client";
-import { useEffect, useState } from 'react';
-import EventForm from '@/components/shared/EventForm';
+import EventForm from "@/components/shared/EventForm"
+import { auth } from "@clerk/nextjs/server";
 
 const CreateEvent = () => {
-  const [userId, setUserId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const { sessionClaims } = auth();
 
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const res = await fetch('/api/get-user-id');
-        if (!res.ok) {
-          throw new Error('User not authenticated');
-        }
-        const data = await res.json();
-        setUserId(data.userId);
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('An unknown error occurred');
-        }
-      }
-    };
-
-    fetchUserId();
-  }, []);
-
-  if (error) {
-    return (
-      <div className="wrapper my-8">
-        <p className="text-center text-red-500">{error}</p>
-      </div>
-    );
-  }
-
-  if (!userId) {
-    return (
-      <div className="wrapper my-8">
-        <p className="text-center text-red-500">Loading...</p>
-      </div>
-    );
-  }
+  const userId = sessionClaims?.userId as string;
 
   return (
     <>
@@ -53,7 +16,7 @@ const CreateEvent = () => {
         <EventForm userId={userId} type="Create" />
       </div>
     </>
-  );
-};
+  )
+}
 
-export default CreateEvent;
+export default CreateEvent

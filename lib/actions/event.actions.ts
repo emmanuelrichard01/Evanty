@@ -28,7 +28,7 @@ const populateEvent = (query: any) => {
 };
 
 // CREATE
-export async function createEvent({ userId, event, path }: CreateEventParams): Promise<any> {
+export async function createEvent({ userId, event, path }: CreateEventParams) {
   try {
     await connectToDatabase();
 
@@ -45,7 +45,7 @@ export async function createEvent({ userId, event, path }: CreateEventParams): P
 }
 
 // GET ONE EVENT BY ID
-export async function getEventById(eventId: string): Promise<any> {
+export async function getEventById(eventId: string) {
   try {
     await connectToDatabase();
 
@@ -60,7 +60,7 @@ export async function getEventById(eventId: string): Promise<any> {
 }
 
 // UPDATE
-export async function updateEvent({ userId, event, path }: UpdateEventParams): Promise<any> {
+export async function updateEvent({ userId, event, path }: UpdateEventParams) {
   try {
     await connectToDatabase();
 
@@ -90,7 +90,7 @@ export async function updateEvent({ userId, event, path }: UpdateEventParams): P
 }
 
 // DELETE
-export async function deleteEvent({ eventId, path }: DeleteEventParams): Promise<void> {
+export async function deleteEvent({ eventId, path }: DeleteEventParams) {
   try {
     await connectToDatabase();
 
@@ -102,7 +102,7 @@ export async function deleteEvent({ eventId, path }: DeleteEventParams): Promise
 }
 
 // GET ALL EVENTS
-export async function getAllEvents({ query, limit = 6, page, category }: GetAllEventsParams): Promise<any> {
+export async function getAllEvents({ query, limit = 6, page, category }: GetAllEventsParams) {
   try {
     await connectToDatabase();
 
@@ -131,7 +131,7 @@ export async function getAllEvents({ query, limit = 6, page, category }: GetAllE
 }
 
 // GET EVENTS BY ORGANIZER
-export async function getEventsByUser({ userId, limit = 6, page }: GetEventsByUserParams): Promise<any> {
+export async function getEventsByUser({ userId, limit = 6, page }: GetEventsByUserParams) {
   try {
     await connectToDatabase();
 
@@ -158,7 +158,7 @@ export async function getRelatedEventsByCategory({
   eventId,
   limit = 3,
   page = 1,
-}: GetRelatedEventsByCategoryParams): Promise<any> {
+}: GetRelatedEventsByCategoryParams) {
   try {
     await connectToDatabase();
 
