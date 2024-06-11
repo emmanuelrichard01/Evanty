@@ -2,11 +2,10 @@
 const nextConfig = {
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'utfs.io',
-        port: '',
-      },
+      { protocol: 'https', hostname: 'utfs.io', pathname: '**' },
+      { protocol: 'https', hostname: 'uploadthing.com', pathname: '**' },
+      { protocol: 'https', hostname: 'img.clerk.com', pathname: '**' },
+      { protocol: 'https', hostname: 'files.stripe.com', pathname: '**' },
     ],
   },
 };

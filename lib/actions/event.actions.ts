@@ -62,14 +62,14 @@ export async function getEventById(eventId: string) {
 // UPDATE
 export async function updateEvent({ userId, event, path }: UpdateEventParams) {
   try {
-    await connectToDatabase();
+    await connectToDatabase()
 
     const eventToUpdate = await Event.findById(event._id).populate('organizer');
     if (!eventToUpdate) throw new Error('Event not found');
 
     // Ensure organizer is of type ObjectId
-    const organizerId = typeof eventToUpdate.organizer === 'object' && 'toHexString' in eventToUpdate.organizer
-      ? (eventToUpdate.organizer as any)._id.toHexString()
+    const organizerId = eventToUpdate.organizer instanceof User
+      ? eventToUpdate.organizer._id.toString()
       : eventToUpdate.organizer.toString();
 
     if (organizerId !== userId) {
