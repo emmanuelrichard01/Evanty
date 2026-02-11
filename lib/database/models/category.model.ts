@@ -1,6 +1,6 @@
 import { Document, Schema, model, models } from 'mongoose';
 
-export interface ICategory extends Document {
+export interface ICategory {
   _id: string;
   name: string;
   createdAt?: Date;
@@ -22,12 +22,12 @@ const CategorySchema = new Schema<ICategory>(
 CategorySchema.index({ name: 1 });
 
 // Example of a virtual property
-CategorySchema.virtual('lowercaseName').get(function () {
+CategorySchema.virtual('lowercaseName').get(function (this: ICategory) {
   return this.name.toLowerCase();
 });
 
 // Example of a schema method
-CategorySchema.methods.findSimilarCategories = function () {
+CategorySchema.methods.findSimilarCategories = function (this: ICategory & Document) {
   return this.model('Category').find({ name: this.name });
 };
 

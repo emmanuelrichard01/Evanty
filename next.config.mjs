@@ -1,5 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  /*
+   * Update for Next.js 14+: serverExternalPackages should be under experimental
+   * or serverComponentsExternalPackages depending on exact version.
+   * Using generic experimental.serverComponentsExternalPackages which is widely supported.
+   */
+  experimental: {
+    serverComponentsExternalPackages: ['mongoose'],
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'utfs.io', pathname: '**' },
@@ -8,7 +16,6 @@ const nextConfig = {
       { protocol: 'https', hostname: 'files.stripe.com', pathname: '**' },
     ],
   },
-  serverExternalPackages: ['mongoose'],
   transpilePackages: [
     '@uploadthing/react',
     'uploadthing',

@@ -1,0 +1,27 @@
+
+> evanty@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.16
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+Failed to compile.
+
+./lib/database/models/event.model.ts:4:18
+Type error: Interface 'IEvent' incorrectly extends interface 'Document<ObjectId, any, any, Record<string, any>, {}>'.
+  Types of property '_id' are incompatible.
+    Type 'string' is not assignable to type 'ObjectId'.
+
+[0m [90m 2 |[39m[0m
+[0m [90m 3 |[39m [90m// Interface for the Event document[39m[0m
+[0m[31m[1m>[22m[39m[90m 4 |[39m [36mexport[39m [36minterface[39m [33mIEvent[39m [36mextends[39m [33mDocument[39m {[0m
+[0m [90m   |[39m                  [31m[1m^[22m[39m[0m
+[0m [90m 5 |[39m   _id[33m:[39m string[33m;[39m[0m
+[0m [90m 6 |[39m   title[33m:[39m string[33m;[39m[0m
+[0m [90m 7 |[39m   description[33m?[39m[33m:[39m string[33m;[39m[0m

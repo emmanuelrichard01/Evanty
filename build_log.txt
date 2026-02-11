@@ -1,0 +1,57 @@
+
+> evanty@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.16
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./lib/database/index.ts
+Module not found: Can't resolve 'mongoose'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/actions/order.actions.ts
+./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cricha%5C%5COneDrive%5C%5CDocuments%5C%5CEvanty%5C%5Cnode_modules%5C%5C%40clerk%5C%5Cnextjs%5C%5Cdist%5C%5Cesm%5C%5Capp-router%5C%5Cserver-actions.js%22%2C%5B%22invalidateCacheAction%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cricha%5C%5COneDrive%5C%5CDocuments%5C%5CEvanty%5C%5Clib%5C%5Cactions%5C%5Corder.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getOrdersByEvent%22%2C%22checkoutOrder%22%2C%22getOrdersByUser%22%2C%22createOrder%22%2C%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=true!
+
+./lib/database/index.ts
+Module not found: Can't resolve 'mongoose'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/actions/event.actions.ts
+./app/(root)/page.tsx
+
+./lib/database/models/category.model.ts
+Module not found: Can't resolve 'mongoose'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/actions/event.actions.ts
+./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cricha%5C%5COneDrive%5C%5CDocuments%5C%5CEvanty%5C%5Clib%5C%5Cactions%5C%5Cevent.actions.ts%22%2C%5B%22getEventsByUser%22%2C%22deleteEvent%22%2C%22createEvent%22%2C%22getRelatedEventsByCategory%22%2C%22getAllEvents%22%2C%22getEventById%22%2C%22updateEvent%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cricha%5C%5COneDrive%5C%5CDocuments%5C%5CEvanty%5C%5Clib%5C%5Cactions%5C%5Ccategory.actions.ts%22%2C%5B%22%24%24ACTION_0%22%2C%22getAllCategories%22%2C%22%24%24ACTION_1%22%2C%22createCategory%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cricha%5C%5COneDrive%5C%5CDocuments%5C%5CEvanty%5C%5Cnode_modules%5C%5C%40clerk%5C%5Cnextjs%5C%5Cdist%5C%5Cesm%5C%5Capp-router%5C%5Cserver-actions.js%22%2C%5B%22invalidateCacheAction%22%5D%5D%5D&__client_imported__=true!
+
+./lib/database/models/category.model.ts
+Module not found: Can't resolve 'mongoose'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/actions/event.actions.ts
+./app/(root)/page.tsx
+
+./lib/database/models/event.model.ts
+Module not found: Can't resolve 'mongoose'
+
+https://nextjs.org/docs/messages/module-not-found
+
+Import trace for requested module:
+./lib/actions/order.actions.ts
+./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22C%3A%5C%5CUsers%5C%5Cricha%5C%5COneDrive%5C%5CDocuments%5C%5CEvanty%5C%5Cnode_modules%5C%5C%40clerk%5C%5Cnextjs%5C%5Cdist%5C%5Cesm%5C%5Capp-router%5C%5Cserver-actions.js%22%2C%5B%22invalidateCacheAction%22%5D%5D%2C%5B%22C%3A%5C%5CUsers%5C%5Cricha%5C%5COneDrive%5C%5CDocuments%5C%5CEvanty%5C%5Clib%5C%5Cactions%5C%5Corder.actions.ts%22%2C%5B%22%24%24ACTION_1%22%2C%22getOrdersByEvent%22%2C%22checkoutOrder%22%2C%22getOrdersByUser%22%2C%22createOrder%22%2C%22%24%24ACTION_0%22%5D%5D%5D&__client_imported__=true!
+
+
+> Build failed because of webpack errors

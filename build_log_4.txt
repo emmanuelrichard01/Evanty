@@ -1,0 +1,40 @@
+
+> evanty@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.16
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types ...
+   Collecting page data ...
+DOMException [InvalidCharacterError]: Invalid character
+    at atob (node:buffer:1300:13)
+    at i (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\chunks\946.js:20:20140)
+    at C:\Users\richa\OneDrive\Documents\Evanty\.next\server\chunks\946.js:20:18531
+    at o (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\chunks\946.js:20:18579)
+    at C:\Users\richa\OneDrive\Documents\Evanty\.next\server\chunks\946.js:3:1070
+    at 38833 (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\chunks\946.js:3:1293)
+    at t (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\webpack-runtime.js:1:128)
+    at 9403 (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\chunks\797.js:10:15715)
+    at t (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\webpack-runtime.js:1:128)
+    at 54403 (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\app\(auth)\sign-in\[[...sign-in]]\page.js:1:3930)
+DOMException [InvalidCharacterError]: Invalid character
+    at atob (node:buffer:1300:13)
+    at i (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\chunks\946.js:20:20140)
+    at C:\Users\richa\OneDrive\Documents\Evanty\.next\server\chunks\946.js:20:18531
+    at o (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\chunks\946.js:20:18579)
+    at C:\Users\richa\OneDrive\Documents\Evanty\.next\server\chunks\946.js:3:1070
+    at 38833 (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\chunks\946.js:3:1293)
+    at t (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\webpack-runtime.js:1:128)
+    at 9403 (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\chunks\797.js:10:15715)
+    at t (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\webpack-runtime.js:1:128)
+    at 54403 (C:\Users\richa\OneDrive\Documents\Evanty\.next\server\app\(auth)\sign-up\[[...sign-up]]\page.js:1:3928)
+
+> Build error occurred
+Error: Failed to collect page data for /sign-in/[[...sign-in]]
+    at C:\Users\richa\OneDrive\Documents\Evanty\node_modules\next\dist\build\utils.js:1268:15
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5) {
+  type: 'Error'
+}

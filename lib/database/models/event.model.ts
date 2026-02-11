@@ -1,7 +1,7 @@
 import { Document, Schema, model, models, Model } from 'mongoose';
 
 // Interface for the Event document
-export interface IEvent extends Document {
+export interface IEvent {
   _id: string;
   title: string;
   description?: string;
@@ -43,12 +43,12 @@ EventSchema.index({ category: 1 });
 EventSchema.index({ startDateTime: 1 });
 
 // Static methods
-EventSchema.statics.findByCategory = function (categoryId: string) {
+EventSchema.statics.findByCategory = function (this: Model<IEvent>, categoryId: string) {
   return this.find({ category: categoryId });
 };
 
 // Instance methods
-EventSchema.methods.isOngoing = function () {
+EventSchema.methods.isOngoing = function (this: IEvent) {
   const now = new Date();
   return this.startDateTime <= now && this.endDateTime >= now;
 };
