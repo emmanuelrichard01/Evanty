@@ -1,17 +1,14 @@
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import qs from 'query-string'
+
 import { UrlQueryParams, RemoveUrlQueryParams } from '@/types'
 
-// Combine class names using clsx and tailwind-merge
-export function cn(...inputs: ClassValue[]): string {
+export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-// Format a date string into various formats
 export const formatDateTime = (dateString: Date) => {
-  const date = new Date(dateString)
-
   const dateTimeOptions: Intl.DateTimeFormatOptions = {
     weekday: 'short',
     month: 'short',
@@ -35,28 +32,29 @@ export const formatDateTime = (dateString: Date) => {
   }
 
   return {
-    dateTime: date.toLocaleString('en-US', dateTimeOptions),
-    dateOnly: date.toLocaleString('en-US', dateOptions),
-    timeOnly: date.toLocaleString('en-US', timeOptions),
+    dateTime: new Date(dateString).toLocaleString('en-US', dateTimeOptions),
+    dateOnly: new Date(dateString).toLocaleString('en-US', dateOptions),
+    timeOnly: new Date(dateString).toLocaleString('en-US', timeOptions),
   }
 }
 
-// Convert a file to a URL
-export const convertFileToUrl = (file: File): string => URL.createObjectURL(file)
+export const convertFileToUrl = (file: File) => URL.createObjectURL(file)
 
-// Format a price string into USD currency format
-export const formatPrice = (price: string): string => {
+export const formatPrice = (price: string) => {
   const amount = parseFloat(price)
-  return new Intl.NumberFormat('en-US', {
+  const formattedPrice = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
   }).format(amount)
+
+  return formattedPrice
 }
 
-// Form a URL query string from parameters
-export function formUrlQuery({ params, key, value }: UrlQueryParams): string {
+export function formUrlQuery({ params, key, value }: UrlQueryParams) {
   const currentUrl = qs.parse(params)
+
   currentUrl[key] = value
+
   return qs.stringifyUrl(
     {
       url: window.location.pathname,
@@ -66,10 +64,13 @@ export function formUrlQuery({ params, key, value }: UrlQueryParams): string {
   )
 }
 
-// Remove specified keys from a URL query string
-export function removeKeysFromQuery({ params, keysToRemove }: RemoveUrlQueryParams): string {
+export function removeKeysFromQuery({ params, keysToRemove }: RemoveUrlQueryParams) {
   const currentUrl = qs.parse(params)
-  keysToRemove.forEach(key => delete currentUrl[key])
+
+  keysToRemove.forEach(key => {
+    delete currentUrl[key]
+  })
+
   return qs.stringifyUrl(
     {
       url: window.location.pathname,
@@ -79,8 +80,11 @@ export function removeKeysFromQuery({ params, keysToRemove }: RemoveUrlQueryPara
   )
 }
 
-// Handle errors consistently
-export const handleError = (error: unknown): void => {
+export const handleError = (error: unknown) => {
   console.error(error)
   throw new Error(typeof error === 'string' ? error : JSON.stringify(error))
+}
+
+export const serializeMongo = (obj: any) => {
+  return JSON.parse(JSON.stringify(obj))
 }

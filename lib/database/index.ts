@@ -1,49 +1,34 @@
-import mongoose, { Connection } from 'mongoose';
+import mongoose, { Mongoose } from 'mongoose';
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
-if (!MONGODB_URI) {
-    throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+interface MongooseConnection {
+    conn: Mongoose | null;
+    promise: Promise<Mongoose> | null;
 }
 
-interface Cached {
-    conn: Connection | null;
-    promise: Promise<Connection> | null;
+let cached: MongooseConnection = (global as any).mongoose;
+
+if (!cached) {
+    cached = (global as any).mongoose = {
+        conn: null,
+        promise: null,
+    };
 }
 
-declare global {
-    var mongooseCache: Cached;
-}
+export const connectToDatabase = async () => {
+    if (cached.conn) return cached.conn;
 
-global.mongooseCache = global.mongooseCache || { conn: null, promise: null };
-
-const cached = global.mongooseCache;
-
-export const connectToDatabase = async (): Promise<Connection> => {
-    if (cached.conn) {
-        return cached.conn;
-    }
+    if (!MONGODB_URI) throw new Error('MONGODB_URI is missing');
 
     if (!cached.promise) {
         cached.promise = mongoose.connect(MONGODB_URI, {
             dbName: 'evanty1',
             bufferCommands: false,
-        }).then(mongoose => {
-            console.log('Connected to MongoDB');
-            return mongoose.connection;
-        }).catch(err => {
-            console.error('Failed to connect to MongoDB', err);
-            cached.promise = null;
-            throw err;
-        });
+        })
     }
 
-    try {
-        cached.conn = await cached.promise;
-    } catch (error) {
-        cached.promise = null; // Reset the promise in case of error
-        throw error;
-    }
+    cached.conn = await cached.promise;
 
     return cached.conn;
-};
+}

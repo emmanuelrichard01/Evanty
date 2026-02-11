@@ -1,7 +1,7 @@
 "use server"
 
 import { CreateCategoryParams } from "@/types"
-import { handleError } from "../utils"
+import { handleError, serializeMongo } from "../utils"
 import { connectToDatabase } from "../database"
 import Category from "../database/models/category.model"
 
@@ -11,7 +11,7 @@ export const createCategory = async ({ categoryName }: CreateCategoryParams) => 
 
     const newCategory = await Category.create({ name: categoryName });
 
-    return JSON.parse(JSON.stringify(newCategory));
+    return serializeMongo(newCategory);
   } catch (error) {
     handleError(error)
   }
@@ -23,7 +23,7 @@ export const getAllCategories = async () => {
 
     const categories = await Category.find();
 
-    return JSON.parse(JSON.stringify(categories));
+    return serializeMongo(categories);
   } catch (error) {
     handleError(error)
   }

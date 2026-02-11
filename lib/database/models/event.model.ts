@@ -38,6 +38,10 @@ const EventSchema = new Schema<IEvent>(
   }
 );
 
+EventSchema.index({ title: 'text', description: 'text' });
+EventSchema.index({ category: 1 });
+EventSchema.index({ startDateTime: 1 });
+
 // Static methods
 EventSchema.statics.findByCategory = function (categoryId: string) {
   return this.find({ category: categoryId });

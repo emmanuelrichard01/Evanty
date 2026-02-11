@@ -5,7 +5,7 @@ import { connectToDatabase } from '@/lib/database';
 import User from '@/lib/database/models/user.model';
 import Order from '@/lib/database/models/order.model';
 import Event from '@/lib/database/models/event.model';
-import { handleError } from '@/lib/utils';
+import { handleError, serializeMongo } from '@/lib/utils';
 import { CreateUserParams, UpdateUserParams } from '@/types';
 
 // Utility function to handle database connection
@@ -15,6 +15,7 @@ async function withDatabaseConnection<T>(fn: () => Promise<T>): Promise<T> {
     return await fn();
   } catch (error) {
     handleError(error);
+    // @ts-ignore
     throw error;
   }
 }
@@ -24,7 +25,7 @@ export async function createUser(user: CreateUserParams) {
   return withDatabaseConnection(async () => {
     try {
       const newUser = await User.create(user);
-      return JSON.parse(JSON.stringify(newUser));
+      return serializeMongo(newUser);
     } catch (error) {
       console.error('Error creating user:', error);
       throw new Error('User creation failed');
@@ -38,7 +39,7 @@ export async function getUserById(userId: string) {
     try {
       const user = await User.findById(userId);
       if (!user) throw new Error('User not found');
-      return JSON.parse(JSON.stringify(user));
+      return serializeMongo(user);
     } catch (error) {
       console.error('Error getting user:', error);
       throw new Error('User retrieval failed');
@@ -52,7 +53,7 @@ export async function updateUser(clerkId: string, user: UpdateUserParams) {
     try {
       const updatedUser = await User.findOneAndUpdate({ clerkId }, user, { new: true });
       if (!updatedUser) throw new Error('User update failed');
-      return JSON.parse(JSON.stringify(updatedUser));
+      return serializeMongo(updatedUser);
     } catch (error) {
       console.error('Error updating user:', error);
       throw new Error('User update failed');
@@ -78,7 +79,7 @@ export async function deleteUser(clerkId: string) {
 
       const deletedUser = await User.findByIdAndDelete(userToDelete._id);
       revalidatePath('/');
-      return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;
+      return deletedUser ? serializeMongo(deletedUser) : null;
     } catch (error) {
       console.error('Error deleting user:', error);
       throw new Error('User deletion failed');

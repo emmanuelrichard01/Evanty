@@ -1,11 +1,14 @@
 'use server'
 
+import { Query } from 'mongoose';
+import { auth } from '@clerk/nextjs/server';
+
 import { revalidatePath } from 'next/cache';
 import { connectToDatabase } from '@/lib/database';
 import Event from '@/lib/database/models/event.model';
 import User from '@/lib/database/models/user.model';
 import Category from '@/lib/database/models/category.model';
-import { handleError } from '@/lib/utils';
+import { handleError, serializeMongo } from '@/lib/utils';
 import {
   CreateEventParams,
   UpdateEventParams,
@@ -21,7 +24,7 @@ const getCategoryByName = async (name: string) => {
 };
 
 // Utility function to populate event fields
-const populateEvent = (query: any) => {
+const populateEvent = (query: Query<any, any>) => {
   return query
     .populate({ path: 'organizer', model: User, select: '_id firstName lastName' })
     .populate({ path: 'category', model: Category, select: '_id name' });
@@ -38,7 +41,7 @@ export async function createEvent({ userId, event, path }: CreateEventParams) {
     const newEvent = await Event.create({ ...event, category: event.categoryId, organizer: userId });
     revalidatePath(path);
 
-    return JSON.parse(JSON.stringify(newEvent));
+    return serializeMongo(newEvent);
   } catch (error) {
     handleError(error);
   }
@@ -53,7 +56,7 @@ export async function getEventById(eventId: string) {
 
     if (!event) throw new Error('Event not found');
 
-    return JSON.parse(JSON.stringify(event));
+    return serializeMongo(event);
   } catch (error) {
     handleError(error);
   }
@@ -83,7 +86,7 @@ export async function updateEvent({ userId, event, path }: UpdateEventParams) {
     );
     revalidatePath(path);
 
-    return JSON.parse(JSON.stringify(updatedEvent));
+    return serializeMongo(updatedEvent);
   } catch (error) {
     handleError(error);
   }
@@ -93,6 +96,22 @@ export async function updateEvent({ userId, event, path }: UpdateEventParams) {
 export async function deleteEvent({ eventId, path }: DeleteEventParams) {
   try {
     await connectToDatabase();
+
+    const { sessionClaims } = auth();
+    const userId = sessionClaims?.userId as string;
+
+    if (!userId) {
+      throw new Error('Unauthorized');
+    }
+
+    const eventToDelete = await Event.findById(eventId);
+    if (!eventToDelete) {
+      throw new Error('Event not found');
+    }
+
+    if (eventToDelete.organizer.toString() !== userId) {
+      throw new Error('Unauthorized');
+    }
 
     const deletedEvent = await Event.findByIdAndDelete(eventId);
     if (deletedEvent) revalidatePath(path);
@@ -122,7 +141,7 @@ export async function getAllEvents({ query, limit = 6, page, category }: GetAllE
     const eventsCount = await Event.countDocuments(conditions);
 
     return {
-      data: JSON.parse(JSON.stringify(events)),
+      data: serializeMongo(events),
       totalPages: Math.ceil(eventsCount / limit),
     };
   } catch (error) {
@@ -146,7 +165,7 @@ export async function getEventsByUser({ userId, limit = 6, page }: GetEventsByUs
     const events = await populateEvent(eventsQuery);
     const eventsCount = await Event.countDocuments(conditions);
 
-    return { data: JSON.parse(JSON.stringify(events)), totalPages: Math.ceil(eventsCount / limit) };
+    return { data: serializeMongo(events), totalPages: Math.ceil(eventsCount / limit) };
   } catch (error) {
     handleError(error);
   }
@@ -173,7 +192,7 @@ export async function getRelatedEventsByCategory({
     const events = await populateEvent(eventsQuery);
     const eventsCount = await Event.countDocuments(conditions);
 
-    return { data: JSON.parse(JSON.stringify(events)), totalPages: Math.ceil(eventsCount / limit) };
+    return { data: serializeMongo(events), totalPages: Math.ceil(eventsCount / limit) };
   } catch (error) {
     handleError(error);
   }

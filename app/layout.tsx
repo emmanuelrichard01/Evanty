@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Poppins, Rubik, Work_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -30,7 +31,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={work_sans.variable}>{children}</body>
+        <body className={work_sans.variable}>
+          {children}
+          <Toaster />
+        </body>
       </html>
     </ClerkProvider>
   );

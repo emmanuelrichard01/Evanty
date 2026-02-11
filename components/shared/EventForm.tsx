@@ -20,6 +20,8 @@ import Image from 'next/image';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useUploadThing } from '@/lib/uploadthing'
+import { toast } from "sonner"
+import { handleError } from '@/lib/utils';
 
 type EventFormProps = {
   userId: string;
@@ -47,38 +49,55 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
   });
 
   async function onSubmit(values: z.infer<typeof eventFormSchema>) {
-    let uploadedImageUrl = values.imageUrl;
-
-    if (files.length > 0) {
-      const uploadedImages = await startUpload(files);
-      if (!uploadedImages) {
-        console.error('Image upload failed');
-        return;
-      }
-      uploadedImageUrl = uploadedImages[0].url;
-    }
-
-    const eventPayload = { ...values, imageUrl: uploadedImageUrl };
     try {
+      let uploadedImageUrl = values.imageUrl;
+
+      if (files.length > 0) {
+        const uploadedImages = await startUpload(files);
+
+        if (!uploadedImages) {
+          toast.error('Failed to upload image');
+          return;
+        }
+
+        uploadedImageUrl = uploadedImages[0].url;
+      }
+
       if (type === 'Create') {
-        const newEvent = await createEvent({ event: eventPayload, userId, path: '/profile' });
+        const newEvent = await createEvent({
+          event: { ...values, imageUrl: uploadedImageUrl },
+          userId,
+          path: '/profile'
+        });
+
         if (newEvent) {
           form.reset();
           router.push(`/events/${newEvent._id}`);
+          toast.success('Event created successfully');
         }
-      } else if (type === 'Update' && eventId) {
+      }
+
+      if (type === 'Update' && eventId) {
+        if (!eventId) {
+          router.back();
+          return;
+        }
+
         const updatedEvent = await updateEvent({
           userId,
-          event: { ...eventPayload, _id: eventId },
-          path: `/events/${eventId}`,
+          event: { ...values, imageUrl: uploadedImageUrl, _id: eventId },
+          path: `/events/${eventId}`
         });
+
         if (updatedEvent) {
           form.reset();
           router.push(`/events/${updatedEvent._id}`);
+          toast.success('Event updated successfully');
         }
       }
     } catch (error) {
-      console.error('Event submission failed:', error);
+      console.error(error);
+      toast.error(`${type} event failed. Please try again.`);
     }
   }
 
@@ -277,9 +296,13 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           type="submit"
           size="lg"
           disabled={form.formState.isSubmitting}
-          className="button col-span-2 w-1/4"
+          className="button col-span-2 w-full"
         >
-          {form.formState.isSubmitting ? 'Submitting...' : `${type} Event `}
+          {form.formState.isSubmitting ? (
+            'Submitting...'
+          ) : (
+            `${type} Event`
+          )}
         </Button>
       </form>
     </Form>

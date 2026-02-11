@@ -2,7 +2,7 @@
 
 Evanty is a modern, full-stack event management platform built with Next.js 14, enabling users to create, discover, and attend global events. It features a robust event organization system, secure ticket payments via Stripe, and seamless user authentication with Clerk.
 
-![Evanty Hero](public\assets\images\hero.png)
+![Evanty Hero](/assets/images/hero.png)
 
 ## 🌟 Features
 

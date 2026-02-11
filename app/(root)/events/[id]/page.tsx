@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { getEventById, getRelatedEventsByCategory } from '@/lib/actions/event.actions';
 import { formatDateTime } from '@/lib/utils';
@@ -7,6 +8,18 @@ import Image from 'next/image';
 // Dynamic imports for large components
 const CheckoutButton = dynamic(() => import('@/components/shared/CheckoutButton'));
 const Collection = dynamic(() => import('@/components/shared/Collection'));
+
+export async function generateMetadata({ params: { id } }: SearchParamProps): Promise<Metadata> {
+  const event = await getEventById(id);
+
+  return {
+    title: event.title,
+    description: event.description,
+    openGraph: {
+      images: [event.imageUrl],
+    },
+  };
+}
 
 const EventDetails = async ({ params: { id }, searchParams }: SearchParamProps) => {
   try {

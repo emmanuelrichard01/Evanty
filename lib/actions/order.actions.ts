@@ -3,7 +3,7 @@
 import Stripe from 'stripe';
 import { CheckoutOrderParams, CreateOrderParams, GetOrdersByEventParams, GetOrdersByUserParams } from '@/types';
 import { redirect } from 'next/navigation';
-import { handleError } from '@/lib/utils';
+import { handleError, serializeMongo } from '@/lib/utils';
 import { connectToDatabase } from '@/lib/database';
 import Order from '@/lib/database/models/order.model';
 import Event from '@/lib/database/models/event.model';
@@ -52,7 +52,7 @@ export const createOrder = async (order: CreateOrderParams) => {
       event: order.eventId,
       buyer: order.buyerId,
     });
-    return JSON.parse(JSON.stringify(newOrder));
+    return serializeMongo(newOrder);
   } catch (error) {
     handleError(error);
   }
@@ -105,7 +105,7 @@ export async function getOrdersByEvent({ searchString, eventId }: GetOrdersByEve
         },
       },
     ]);
-    return JSON.parse(JSON.stringify(orders));
+    return serializeMongo(orders);
   } catch (error) {
     handleError(error);
   }
@@ -131,7 +131,7 @@ export async function getOrdersByUser({ userId, limit = 3, page }: GetOrdersByUs
         },
       });
     const ordersCount = await Order.countDocuments(conditions);
-    return { data: JSON.parse(JSON.stringify(orders)), totalPages: Math.ceil(ordersCount / limit) };
+    return { data: serializeMongo(orders), totalPages: Math.ceil(ordersCount / limit) };
   } catch (error) {
     handleError(error);
   }
