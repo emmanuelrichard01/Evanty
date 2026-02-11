@@ -8,6 +8,12 @@ const nextConfig = {
       { protocol: 'https', hostname: 'files.stripe.com', pathname: '**' },
     ],
   },
+  serverExternalPackages: ['mongoose'],
+  transpilePackages: [
+    '@uploadthing/react',
+    'uploadthing',
+    '@uploadthing/mime-types',
+  ],
 };
 
 export default nextConfig;
