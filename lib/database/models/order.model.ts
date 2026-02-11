@@ -58,7 +58,7 @@ const OrderSchema = new Schema<IOrder>(
 );
 
 // Adding an index to the stripeId field for uniqueness
-OrderSchema.index({ stripeId: 1 }, { unique: true });
+// OrderSchema.index({ stripeId: 1 }, { unique: true });
 
 // Adding a virtual for event title
 OrderSchema.virtual('eventTitle').get(function () {

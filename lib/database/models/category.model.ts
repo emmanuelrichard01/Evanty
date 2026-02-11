@@ -19,7 +19,7 @@ const CategorySchema = new Schema<ICategory>(
 );
 
 // Adding an index to the name field for faster queries
-CategorySchema.index({ name: 1 });
+// CategorySchema.index({ name: 1 });
 
 // Example of a virtual property
 CategorySchema.virtual('lowercaseName').get(function (this: ICategory) {
