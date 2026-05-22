@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { loadStripe } from '@stripe/stripe-js';
 
-import { IEvent } from '@/lib/database/models/event.model';
+import { IEvent } from '@/types';
 import { Button } from '../ui/button';
 import { checkoutOrder } from '@/lib/actions/order.actions';
 
@@ -23,7 +23,7 @@ const Checkout = ({ event, userId }: { event: IEvent, userId: string }) => {
   const onCheckout = async () => {
     const order = {
       eventTitle: event.title,
-      eventId: event._id,
+      eventId: event.id,
       price: event.price,
       isFree: event.isFree,
       buyerId: userId

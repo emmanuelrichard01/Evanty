@@ -36,14 +36,20 @@ const Search = ({ placeholder = 'Search title...', initialQuery = '' }: SearchPr
   }, [query, searchParams, router]);
 
   return (
-    <div className="flex items-center min-h-[54px] w-full overflow-hidden rounded-full bg-grey-50 px-4 py-2">
-      <Image src="/assets/icons/search.svg" alt="search" width={24} height={24} />
+    <div className="flex items-center h-12 w-full overflow-hidden rounded-xl border border-slate-200/80 bg-white px-4 shadow-sm focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/10 transition-all">
+      <Image 
+        src="/assets/icons/search.svg" 
+        alt="search" 
+        width={20} 
+        height={20} 
+        className="text-slate-400 opacity-60"
+      />
       <Input
         type="text"
         placeholder={placeholder}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="p-regular-16 border-0 bg-grey-50 outline-none placeholder:text-grey-500 focus:ring-0"
+        className="p-regular-16 border-0 bg-transparent outline-none placeholder:text-slate-400 focus:ring-0 focus-visible:ring-0 focus-visible:ring-offset-0 focus:border-0 h-full w-full"
       />
     </div>
   );

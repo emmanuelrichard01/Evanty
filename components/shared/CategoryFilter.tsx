@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getAllCategories } from "@/lib/actions/category.actions";
-import { ICategory } from "@/lib/database/models/category.model";
+import { ICategory } from "@/types";
 import { formUrlQuery, removeKeysFromQuery } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -53,7 +53,7 @@ const CategoryFilter = ({ initialCategory = 'All' }: CategoryFilterProps) => {
         {categories.map((category) => (
           <SelectItem
             value={category.name}
-            key={category._id as string} // Explicitly typing key as string
+            key={category.id}
             className="select-item p-regular-14"
           >
             {category.name}

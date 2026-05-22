@@ -36,7 +36,7 @@ export type CreateEventParams = {
 export type UpdateEventParams = {
   userId: string
   event: {
-    _id: string
+    id: string
     title: string
     imageUrl: string
     description: string
@@ -77,7 +77,7 @@ export type GetRelatedEventsByCategoryParams = {
 }
 
 export type Event = {
-  _id: string
+  id: string
   title: string
   description: string
   price: string
@@ -88,15 +88,22 @@ export type Event = {
   endDateTime: Date
   url: string
   organizer: {
-    _id: string
+    id: string
     firstName: string
     lastName: string
   }
   category: {
-    _id: string
+    id: string
     name: string
   }
 }
+
+export type ICategory = {
+  id: string;
+  name: string;
+}
+
+export type IEvent = Event;
 
 // ====== CATEGORY PARAMS
 export type CreateCategoryParams = {
@@ -144,11 +151,11 @@ export type RemoveUrlQueryParams = {
 }
 
 export type SearchParamProps = {
-  params: { id: string };
-  searchParams: {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{
     page?: string;
     query?: string;
     category?: string;
     [key: string]: string | string[] | undefined;
-  };
+  }>;
 }

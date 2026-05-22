@@ -1,7 +1,7 @@
 import { Webhook } from 'svix';
 import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
-import { createUser, deleteUser, updateUser } from '@/lib/actions/user.actions';
+import { createUser, deleteUser, updateUser } from '@/lib/repositories/user.repo';
 import { clerkClient } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
         throw new Error('Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local');
     }
 
-    const headerPayload = headers();
+    const headerPayload = await headers();
     const svix_id = headerPayload.get("svix-id");
     const svix_timestamp = headerPayload.get("svix-timestamp");
     const svix_signature = headerPayload.get("svix-signature");
@@ -47,54 +47,49 @@ export async function POST(req: Request) {
     const eventType = evt.type;
 
     if (eventType === 'user.created') {
-        const { id, email_addresses, image_url, first_name, last_name, username } = evt.data;
+        const { id, email_addresses, image_url, first_name, last_name } = evt.data;
+        const fullName = `${first_name || ''} ${last_name || ''}`.trim();
 
-        const user = {
+        const newUser = await createUser({
             clerkId: id,
             email: email_addresses[0].email_address,
-            username: username!,
-            firstName: first_name,
-            lastName: last_name,
-            photo: image_url,
-        };
-
-        const newUser = await createUser(user);
+            fullName: fullName,
+            avatarUrl: image_url,
+        });
 
         if (newUser) {
-            await clerkClient.users.updateUserMetadata(id, {
+            const client = await clerkClient();
+            await client.users.updateUserMetadata(id, {
                 publicMetadata: {
-                    userId: newUser._id
+                    userId: newUser.id
                 }
             });
         }
 
-        console.log('CreateUser Successful userId:', evt.data.id);
-        alert("New user created Successful")
+        console.log('CreateUser Successful userId:', id);
         return NextResponse.json({ message: 'OK', user: newUser });
     }
 
     if (eventType === 'user.updated') {
-        const { id, image_url, first_name, last_name, username } = evt.data;
+        const { id, image_url, first_name, last_name } = evt.data;
+        const fullName = `${first_name || ''} ${last_name || ''}`.trim();
 
-        const user = {
-            firstName: first_name,
-            lastName: last_name,
-            username: username!,
-            photo: image_url,
-        };
+        const updatedUser = await updateUser(id, {
+            fullName: fullName,
+            avatarUrl: image_url,
+        });
 
-        const updatedUser = await updateUser(id, user);
-
-        console.log('UpdateUser Successful userId:', evt.data.id);
+        console.log('UpdateUser Successful userId:', id);
         return NextResponse.json({ message: 'OK', user: updatedUser });
     }
 
     if (eventType === 'user.deleted') {
         const { id } = evt.data;
 
-        const deletedUser = await deleteUser(id!);
-
-        return NextResponse.json({ message: 'OK', user: deletedUser });
+        if (id) {
+           const deletedUser = await deleteUser(id);
+           return NextResponse.json({ message: 'OK', user: deletedUser });
+        }
     }
 
     return new Response('', { status: 200 });

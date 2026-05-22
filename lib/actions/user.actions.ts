@@ -1,88 +1,38 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
-import { connectToDatabase } from '@/lib/database';
-import User from '@/lib/database/models/user.model';
-import Order from '@/lib/database/models/order.model';
-import Event from '@/lib/database/models/event.model';
-import { handleError, serializeMongo } from '@/lib/utils';
+import { createUser as repoCreateUser, updateUser as repoUpdateUser, deleteUser as repoDeleteUser } from '@/lib/repositories/user.repo';
 import { CreateUserParams, UpdateUserParams } from '@/types';
 
-// Utility function to handle database connection
-async function withDatabaseConnection<T>(fn: () => Promise<T>): Promise<T> {
+export async function createUser(user: CreateUserParams) {
   try {
-    await connectToDatabase();
-    return await fn();
+    const newUser = await repoCreateUser({
+      clerkId: user.clerkId,
+      email: user.email,
+      fullName: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+      avatarUrl: user.photo,
+    });
+    return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
-    handleError(error);
-    // @ts-ignore
     throw error;
   }
 }
 
-// Create a new user
-export async function createUser(user: CreateUserParams) {
-  return withDatabaseConnection(async () => {
-    try {
-      const newUser = await User.create(user);
-      return serializeMongo(newUser);
-    } catch (error) {
-      console.error('Error creating user:', error);
-      throw new Error('User creation failed');
-    }
-  });
-}
-
-// Get user by ID
-export async function getUserById(userId: string) {
-  return withDatabaseConnection(async () => {
-    try {
-      const user = await User.findById(userId);
-      if (!user) throw new Error('User not found');
-      return serializeMongo(user);
-    } catch (error) {
-      console.error('Error getting user:', error);
-      throw new Error('User retrieval failed');
-    }
-  });
-}
-
-// Update user by clerk ID
 export async function updateUser(clerkId: string, user: UpdateUserParams) {
-  return withDatabaseConnection(async () => {
-    try {
-      const updatedUser = await User.findOneAndUpdate({ clerkId }, user, { new: true });
-      if (!updatedUser) throw new Error('User update failed');
-      return serializeMongo(updatedUser);
-    } catch (error) {
-      console.error('Error updating user:', error);
-      throw new Error('User update failed');
-    }
-  });
+  try {
+    const updatedUser = await repoUpdateUser(clerkId, {
+      fullName: `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+      avatarUrl: user.photo,
+    });
+    return JSON.parse(JSON.stringify(updatedUser));
+  } catch (error) {
+    throw error;
+  }
 }
 
-// Delete user by clerk ID
 export async function deleteUser(clerkId: string) {
-  return withDatabaseConnection(async () => {
-    try {
-      const userToDelete = await User.findOne({ clerkId });
-      if (!userToDelete) throw new Error('User not found');
-
-      // Unlink relationships
-      await Promise.all([
-        Event.updateMany(
-          { _id: { $in: userToDelete.events } },
-          { $pull: { organizer: userToDelete._id } }
-        ),
-        Order.updateMany({ _id: { $in: userToDelete.orders } }, { $unset: { buyer: 1 } }),
-      ]);
-
-      const deletedUser = await User.findByIdAndDelete(userToDelete._id);
-      revalidatePath('/');
-      return deletedUser ? serializeMongo(deletedUser) : null;
-    } catch (error) {
-      console.error('Error deleting user:', error);
-      throw new Error('User deletion failed');
-    }
-  });
+  try {
+    await repoDeleteUser(clerkId);
+  } catch (error) {
+    throw error;
+  }
 }

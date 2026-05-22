@@ -1,9 +1,8 @@
-import { withUt } from 'uploadthing/tw';
 import animate from 'tailwindcss-animate';
 
 import type { Config } from 'tailwindcss';
 
-const config: Config = withUt({
+const config: Config = {
   darkMode: ['class'],
   content: [
     './pages/**/*.{ts,tsx}',
@@ -68,9 +67,7 @@ const config: Config = withUt({
         },
       },
       fontFamily: {
-        poppins: ['var(--font-poppins)'],
-        rubik: ['var(--font-rubik)'],
-        Work_Sans: ['var(--font-work_sans)'],
+        sans: ['var(--font-inter)', 'sans-serif'],
       },
       backgroundImage: {
         'dotted-pattern': "url('/assets/images/dotted-pattern.png')",
@@ -98,6 +95,6 @@ const config: Config = withUt({
     },
   },
   plugins: [animate],
-});
+};
 
 export default config;

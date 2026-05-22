@@ -1,30 +1,27 @@
-"use server"
+'use server';
 
-import { CreateCategoryParams } from "@/types"
-import { handleError, serializeMongo } from "../utils"
-import { connectToDatabase } from "../database"
-import Category from "../database/models/category.model"
+import { db } from '@/lib/database';
+import { categories } from '@/lib/database/schema';
+import { asc } from 'drizzle-orm';
+import { CreateCategoryParams } from '@/types';
+import { AppError } from '@/lib/errors';
 
-export const createCategory = async ({ categoryName }: CreateCategoryParams) => {
+export async function createCategory({ categoryName }: CreateCategoryParams) {
   try {
-    await connectToDatabase();
-
-    const newCategory = await Category.create({ name: categoryName });
-
-    return serializeMongo(newCategory);
+    const [category] = await db.insert(categories).values({
+      name: categoryName,
+    }).returning();
+    return JSON.parse(JSON.stringify(category));
   } catch (error) {
-    handleError(error)
+    throw new AppError('CREATE_CATEGORY_FAILED', 'Failed to create category', 500, error);
   }
 }
 
-export const getAllCategories = async () => {
+export async function getAllCategories() {
   try {
-    await connectToDatabase();
-
-    const categories = await Category.find();
-
-    return serializeMongo(categories);
+    const data = await db.select().from(categories).orderBy(asc(categories.name));
+    return JSON.parse(JSON.stringify(data));
   } catch (error) {
-    handleError(error)
+    throw new AppError('GET_CATEGORIES_FAILED', 'Failed to get categories', 500, error);
   }
 }

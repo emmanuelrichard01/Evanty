@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Evanty — Pre-Engineering Documentation</title>
+<style>
+  :root {
+    --bg: #0f0f0f;
+    --bg-surface: #161616;
+    --bg-raised: #1e1e1e;
+    --bg-hover: #242424;
+    --border: rgba(255,255,255,0.08);
+    --border-med: rgba(255,255,255,0.14);
+    --text: #e8e8e8;
+    --text-muted: #888;
+    --text-dim: #555;
+    --accent: #6b8cff;
+    --accent-dim: rgba(107,140,255,0.12);
+    --accent-border: rgba(107,140,255,0.35);
+    --green: #4ade80;
+    --green-dim: rgba(74,222,128,0.1);
+    --green-border: rgba(74,222,128,0.3);
+    --amber: #fbbf24;
+    --amber-dim: rgba(251,191,36,0.1);
+    --amber-border: rgba(251,191,36,0.3);
+    --red: #f87171;
+    --red-dim: rgba(248,113,113,0.1);
+    --red-border: rgba(248,113,113,0.3);
+    --teal: #2dd4bf;
+    --mono: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.7;
+    display: flex;
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    width: 220px;
+    min-width: 220px;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border);
+    padding: 2rem 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    flex-shrink: 0;
+  }
+  .nav-logo {
+    padding: 0 1.25rem 1.5rem;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nav-logo-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 0.75rem 1.25rem 0.25rem;
+  }
+  nav a {
+    display: block;
+    padding: 0.35rem 1.25rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.15s, background 0.15s;
+    border-left: 2px solid transparent;
+  }
+  nav a:hover {
+    color: var(--text);
+    background: var(--bg-hover);
+  }
+  nav a.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  /* MAIN */
+  main {
+    flex: 1;
+    min-width: 0;
+    padding: 3rem 3.5rem 6rem;
+    max-width: 860px;
+  }
+
+  .doc-header {
+    margin-bottom: 3.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .doc-header-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+  .doc-header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    margin-bottom: 0.75rem;
+  }
+  .doc-header-sub {
+    color: var(--text-muted);
+    font-size: 15px;
+    max-width: 540px;
+    line-height: 1.6;
+  }
+  .doc-header-meta {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+  }
+  .meta-item {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .meta-item strong {
+    color: var(--text-muted);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 1px;
+  }
+
+  /* SECTIONS */
+  .doc-section {
+    padding-bottom: 4rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4rem;
+  }
+  .doc-section:last-child { border-bottom: none; }
+
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    margin-bottom: 1.25rem;
+  }
+
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin: 2rem 0 0.75rem;
+  }
+  h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin: 1.5rem 0 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-size: 11px;
+  }
+  p {
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    line-height: 1.7;
+  }
+
+  /* BADGES */
+  .badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 100px;
+    letter-spacing: 0.02em;
+  }
+  .badge-p1 { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-border); }
+  .badge-p2 { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); }
+  .badge-p3 { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber-border); }
+  .badge-out { background: rgba(255,255,255,0.04); color: var(--text-dim); border: 1px solid var(--border); }
+  .badge-critical { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-border); }
+  .badge-get { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-border); font-family: var(--mono); font-size: 10px; }
+  .badge-post { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-border); font-family: var(--mono); font-size: 10px; }
+  .badge-patch { background: var(--amber-dim); color: var(--amber); border: 1px solid var(--amber-border); font-family: var(--mono); font-size: 10px; }
+  .badge-delete { background: var(--red-dim); color: var(--red); border: 1px solid var(--red-border); font-family: var(--mono); font-size: 10px; }
+
+  /* CODE */
+  pre {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    overflow-x: auto;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.65;
+    color: #c9d1d9;
+    margin: 1rem 0;
+  }
+  code {
+    font-family: var(--mono);
+    font-size: 12px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--accent);
+  }
+
+  /* CALLOUT BOXES */
+  .callout {
+    border-radius: 8px;
+    padding: 0.875rem 1rem;
+    margin: 1rem 0;
+    font-size: 13px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    line-height: 1.6;
+  }
+  .callout-info { background: var(--accent-dim); border: 1px solid var(--accent-border); color: #a5b4fc; }
+  .callout-warn { background: var(--amber-dim); border: 1px solid var(--amber-border); color: #fcd34d; }
+  .callout-danger { background: var(--red-dim); border: 1px solid var(--red-border); color: var(--red); }
+  .callout-success { background: var(--green-dim); border: 1px solid var(--green-border); color: var(--green); }
+  .callout-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+
+  /* TABLES */
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 13px; }
+  th { text-align: left; padding: 8px 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-dim); border-bottom: 1px solid var(--border-med); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-muted); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg-hover); }
+
+  /* ADR CARDS */
+  .adr-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.125rem 1.25rem;
+    margin: 0.75rem 0;
+  }
+  .adr-id {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .adr-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+  .adr-decision { font-size: 13px; color: var(--accent); margin-bottom: 6px; font-weight: 500; }
+  .adr-body { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .adr-tradeoff { font-size: 12px; color: var(--text-dim); margin-top: 6px; font-style: italic; }
+
+  /* PERSONA CARDS */
+  .persona-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1rem 0; }
+  .persona-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+  .persona-avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+    margin-bottom: 12px;
+  }
+  .persona-name { font-size: 14px; font-weight: 600; color: var(--text); }
+  .persona-role { font-size: 12px; color: var(--text-dim); margin-bottom: 10px; }
+  .persona-tag { font-size: 11px; color: var(--text-muted); margin-bottom: 3px; display: flex; gap: 6px; }
+  .persona-tag-label { color: var(--text-dim); min-width: 48px; }
+
+  /* STACK GRID */
+  .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+  .stack-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.875rem 1rem;
+  }
+  .stack-concern { font-size: 10px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .stack-choice { font-size: 13px; font-weight: 600; color: var(--text); }
+  .stack-why { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+
+  /* CHECKLIST */
+  .checklist-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1rem; margin: 1rem 0; }
+  .check-category {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+  }
+  .check-cat-title {
+    font-size: 12px; font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 5px 0;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-box {
+    width: 15px; height: 15px;
+    border: 1px solid var(--border-med);
+    border-radius: 3px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .check-label { flex: 1; }
+  .check-note { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
+
+  /* ENDPOINT TABLE */
+  .endpoint-group { margin: 1.25rem 0; }
+  .endpoint-group-title {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-dim);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0;
+  }
+  .endpoint-row {
+    display: grid;
+    grid-template-columns: 60px 220px 1fr auto;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    align-items: start;
+    font-size: 13px;
+  }
+  .endpoint-path { font-family: var(--mono); font-size: 12px; color: var(--text); }
+  .endpoint-desc { color: var(--text-muted); font-size: 12px; }
+  .endpoint-auth { font-size: 11px; color: var(--text-dim); white-space: nowrap; }
+
+  /* FLOW STEPS */
+  .flow-steps { margin: 1rem 0; }
+  .flow-step {
+    display: flex; gap: 14px; padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent-border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; color: var(--accent);
+    flex-shrink: 0;
+  }
+  .flow-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .flow-body { font-size: 12px; color: var(--text-muted); line-height: 1.55; }
+  .flow-code { font-family: var(--mono); font-size: 11px; color: var(--text-dim); margin-top: 4px; background: var(--bg-raised); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); display: inline-block; }
+
+  /* REQUIREMENTS LIST */
+  .req-list { margin: 1rem 0; }
+  .req-row {
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    align-items: start;
+    font-size: 13px;
+  }
+  .req-id { font-family: var(--mono); font-size: 10px; color: var(--text-dim); padding-top: 2px; }
+  .req-text { color: var(--text-muted); line-height: 1.5; }
+  .req-text strong { color: var(--text); font-weight: 600; display: block; font-size: 13px; }
+  .req-text small { font-size: 12px; color: var(--text-dim); }
+
+  /* ROADMAP */
+  .phase-block { margin: 1.5rem 0; }
+  .phase-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 0.75rem;
+  }
+  .phase-num {
+    font-family: var(--mono); font-size: 11px; font-weight: 700;
+    padding: 3px 8px; border-radius: 4px;
+  }
+  .phase-title { font-size: 15px; font-weight: 600; color: var(--text); }
+  .phase-timeline { font-size: 12px; color: var(--text-dim); }
+  .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; }
+  .phase-epic {
+    background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px;
+    padding: 0.875rem 1rem;
+  }
+  .epic-title { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; }
+  .epic-items li { font-size: 12px; color: var(--text-dim); line-height: 1.7; list-style: none; padding-left: 0; }
+  .epic-items li::before { content: '—  '; color: var(--text-dim); }
+
+  /* METRIC CARDS */
+  .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin: 1rem 0; }
+  .metric-card { background: var(--bg-raised); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+  .metric-label { font-size: 11px; color: var(--text-dim); margin-bottom: 6px; }
+  .metric-value { font-size: 22px; font-weight: 700; font-family: var(--mono); }
+  .metric-sub { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+  /* SCHEMA SQL */
+  .sql-table {
+    margin: 1rem 0;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .sql-table-header {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .sql-table-name { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--accent); }
+  .sql-table-desc { font-size: 12px; color: var(--text-dim); }
+  .sql-cols { padding: 0.5rem 0; }
+  .sql-col {
+    display: grid;
+    grid-template-columns: 160px 120px 1fr;
+    gap: 0;
+    padding: 5px 1rem;
+    font-size: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .sql-col:last-child { border-bottom: none; }
+  .sql-col-name { font-family: var(--mono); color: var(--text); }
+  .sql-col-type { font-family: var(--mono); color: #fbbf24; }
+  .sql-col-desc { color: var(--text-dim); }
+
+  /* INDEX LIST */
+  .index-list { margin: 1rem 0; }
+  .index-item {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    font-size: 12.5px;
+  }
+  .index-expr { font-family: var(--mono); font-size: 11px; color: var(--accent); flex: 1; }
+  .index-why { color: var(--text-dim); font-size: 12px; flex: 1.5; }
+
+  /* DIVIDER */
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border-med); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">
+    <div class="nav-logo-dot"></div>
+    Evanty Docs
+  </div>
+  <div class="nav-section-label">product</div>
+  <a href="#prd">01 · PRD</a>
+  <div class="nav-section-label">engineering</div>
+  <a href="#tdd">02 · Technical Design</a>
+  <a href="#schema">03 · Database Schema</a>
+  <a href="#api">04 · API Specification</a>
+  <div class="nav-section-label">operations</div>
+  <a href="#security">05 · Security Checklist</a>
+  <a href="#roadmap">06 · Project Roadmap</a>
+  <a href="#qa">07 · QA & Testing</a>
+  <a href="#observability">08 · Observability</a>
+</nav>
+
+<main>
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="doc-header-eyebrow">Pre-Engineering Documentation · Solo Senior Build</div>
+    <h1>Evanty</h1>
+    <div class="doc-header-sub">Africa-native event management and ticketing platform. Designed for West African organizers with local payment rails, QR check-in, and production-grade reliability.</div>
+    <div class="doc-header-meta">
+      <div class="meta-item"><strong>Status</strong>Pre-build</div>
+      <div class="meta-item"><strong>Phase</strong>Documentation</div>
+      <div class="meta-item"><strong>Market</strong>West Africa (NG, GH primary)</div>
+      <div class="meta-item"><strong>Stack</strong>Next.js 15 · PostgreSQL · Drizzle</div>
+    </div>
+  </div>
+
+
+  <!-- ============================
+       01 · PRD
+  ============================= -->
+  <div class="doc-section" id="prd">
+    <div class="section-eyebrow">01 — Product Requirements Document</div>
+    <div class="section-title">Product Requirements Document</div>
+
+    <h3>Problem statement</h3>
+    <p>Existing event platforms — Lu.ma, Eventbrite, Meetup — are built around Stripe-only USD payments, have no Paystack or Flutterwave integration, no Naira or Cedi pricing, and no understanding of African event behaviour patterns: pay-at-door bank transfers, informal promoter networks, high mobile traffic on constrained connections, and low trust in foreign payment flows. Organizers in Lagos, Abuja, and Accra have no production-grade, locally-aware alternative.</p>
+
+    <div class="callout callout-info">
+      <span class="callout-icon">→</span>
+      <span>This is a portfolio-grade production system, not a tutorial project. Every architectural decision should be defensible in a staff-level engineering interview.</span>
+    </div>
+
+    <h3>Target market</h3>
+    <p>Tech community managers, conference producers, workshop organizers, and cultural event hosts in Nigeria and Ghana. Secondary: their attendees, who are mobile-first and increasingly comfortable with digital payments via Paystack or Flutterwave but distrust foreign-branded checkout experiences.</p>
+
+    <h3>User personas</h3>
+    <div class="persona-grid">
+      <div class="persona-card">
+        <div class="persona-avatar" style="background: rgba(107,140,255,0.15); color: var(--accent);">FA</div>
+        <div class="persona-name">Funmi A.</div>
+        <div class="persona-role">Tech community manager · Lagos</div>
+        <div class="persona-tag"><span class="persona-tag-label">Events</span> Monthly meetups, 50–200 attendees</div>
+        <div class="persona-tag"><span class="persona-tag-label">Pain</span> Manual spreadsheet check-in, WhatsApp ticket tracking</div>
+        <div class="persona-tag"><span class="persona-tag-label">Needs</span> Paystack tickets, QR check-in, attendee list export</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-avatar" style="background: rgba(45,212,191,0.15); color: var(--teal);">CE</div>
+        <div class="persona-name">Chidi E.</div>
+        <div class="persona-role">Conference producer · Abuja</div>
+        <div class="persona-tag"><span class="persona-tag-label">Events</span> 2–3 annual conferences, 500+ attendees</div>
+        <div class="persona-tag"><span class="persona-tag-label">Pain</span> No Naira tier management, no discount codes, no revenue dashboard</div>
+        <div class="persona-tag"><span class="persona-tag-label">Needs</span> GA/VIP/Workshop tiers, promo codes, revenue CSV export</div>
+      </div>
+      <div class="persona-card">
+        <div class="persona-avatar" style="background: rgba(251,191,36,0.15); color: var(--amber);">AO</div>
+        <div class="persona-name">Ade O.</div>
+        <div class="persona-role">Attendee · Software engineer</div>
+        <div class="persona-tag"><span class="persona-tag-label">Finds</span> Events via Twitter, WhatsApp, Telegram</div>
+        <div class="persona-tag"><span class="persona-tag-label">Pain</span> Distrust of foreign checkout, unsure if registration worked</div>
+        <div class="persona-tag"><span class="persona-tag-label">Needs</span> Clear event info, Paystack checkout, QR ticket via email</div>
+      </div>
+    </div>
+
+    <h3>Functional requirements</h3>
+    <div class="req-list">
+      <div class="req-row"><span class="req-id">FR-01</span><div class="req-text"><strong>Organization management</strong><small>Users can create organisations, invite members with roles (owner / admin / member)</small></div><span class="badge badge-p1">Phase 1</span></div>
+      <div class="req-row"><span class="req-id">FR-02</span><div class="req-text"><strong>Event CRUD</strong><small>Title, description, cover image, location, start/end datetime, timezone, category, status (draft/published/cancelled)</small></div><span class="badge badge-p1">Phase 1</span></div>
+      <div class="req-row"><span class="req-id">FR-03</span><div class="req-text"><strong>Ticket types with capacity</strong><small>Multiple types per event (GA, VIP, Free). Each has price in kobo, capacity, and sale window</small></div><span class="badge badge-p1">Phase 1</span></div>
+      <div class="req-row"><span class="req-id">FR-04</span><div class="req-text"><strong>Atomic ticket reservation</strong><small>10-minute hold on inventory before payment. No oversell under any concurrent load</small></div><span class="badge badge-critical">Critical</span></div>
+      <div class="req-row"><span class="req-id">FR-05</span><div class="req-text"><strong>Dual payment rails</strong><small>Stripe (international/diaspora) and Paystack (domestic NG/GH). Single checkout abstraction in service layer</small></div><span class="badge badge-p1">Phase 1</span></div>
+      <div class="req-row"><span class="req-id">FR-06</span><div class="req-text"><strong>QR code tickets</strong><small>Signed QR code generated per ticket on order confirmation. Emailed via Resend</small></div><span class="badge badge-p1">Phase 1</span></div>
+      <div class="req-row"><span class="req-id">FR-07</span><div class="req-text"><strong>Organizer dashboard</strong><small>Revenue total, tickets sold vs remaining by type, attendee list, CSV export</small></div><span class="badge badge-p1">Phase 1</span></div>
+      <div class="req-row"><span class="req-id">FR-08</span><div class="req-text"><strong>Public event discovery</strong><small>Full-text search, category filter, location filter, date range. Paginated results</small></div><span class="badge badge-p1">Phase 1</span></div>
+      <div class="req-row"><span class="req-id">FR-09</span><div class="req-text"><strong>QR check-in app</strong><small>Mobile-optimized /checkin route. Scans QR, marks attendance, handles duplicate scan detection</small></div><span class="badge badge-p2">Phase 2</span></div>
+      <div class="req-row"><span class="req-id">FR-10</span><div class="req-text"><strong>Waitlist management</strong><small>Auto-promotion when tickets release. Email notification to next in queue</small></div><span class="badge badge-p2">Phase 2</span></div>
+      <div class="req-row"><span class="req-id">FR-11</span><div class="req-text"><strong>Discount codes</strong><small>Percentage and flat-amount. Per-code usage limits. Applied at checkout</small></div><span class="badge badge-p2">Phase 2</span></div>
+      <div class="req-row"><span class="req-id">FR-12</span><div class="req-text"><strong>Organizer analytics</strong><small>Traffic source tracking, purchase funnel, revenue trends, ticket type conversion rates</small></div><span class="badge badge-p3">Phase 3</span></div>
+    </div>
+
+    <h3>Non-functional requirements</h3>
+    <div class="req-list">
+      <div class="req-row"><span class="req-id">NFR-01</span><div class="req-text"><strong>API response time</strong><small>p95 under 200ms for read endpoints; under 500ms for write endpoints under normal load</small></div><span class="badge badge-p1">Phase 1</span></div>
+      <div class="req-row"><span class="req-id">NFR-02</span><div class="req-text"><strong>Ticket purchase SLA</strong><small>Checkout redirect within 3 seconds end-to-end on a 4G mobile connection</small></div><span class="badge badge-p1">Phase 1</span></div>
+      <div class="req-row"><span class="req-id">NFR-03</span><div class="req-text"><strong>Uptime</strong><small>99.5% monthly uptime target for portfolio. Documented path to 99.9% with current stack</small></div><span class="badge badge-p1">Phase 1</span></div>
+      <div class="req-row"><span class="req-id">NFR-04</span><div class="req-text"><strong>Zero oversell</strong><small>Atomic SQL reservation guarantee. Verified by concurrent load test before any public traffic</small></div><span class="badge badge-critical">Critical</span></div>
+      <div class="req-row"><span class="req-id">NFR-05</span><div class="req-text"><strong>Mobile-first</strong><small>Primary breakpoint 375px. 70%+ of West African web traffic is mobile. Core flows must work on low bandwidth</small></div><span class="badge badge-p1">Phase 1</span></div>
+      <div class="req-row"><span class="req-id">NFR-06</span><div class="req-text"><strong>Accessibility</strong><small>WCAG 2.1 AA minimum. Keyboard navigable. Screen-reader compatible. 4.5:1 contrast minimum</small></div><span class="badge badge-p1">Phase 1</span></div>
+      <div class="req-row"><span class="req-id">NFR-07</span><div class="req-text"><strong>Privacy compliance</strong><small>NDPR (Nigeria Data Protection Regulation) compliant. Consent collection, data deletion workflow, audit trail</small></div><span class="badge badge-p1">Phase 1</span></div>
+    </div>
+
+    <h3>Out of scope — Phase 1</h3>
+    <p>Recurring events · Discount codes · Waitlist · Attendee check-in · Advanced analytics · Mobile native app · Multi-currency conversion · Offline mode · Event co-organizers</p>
+
+    <h3>Success metrics</h3>
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric-label">Purchase success rate</div><div class="metric-value" style="color: var(--green);">&gt;95%</div><div class="metric-sub">of initiated checkouts</div></div>
+      <div class="metric-card"><div class="metric-label">Oversell incidents</div><div class="metric-value" style="color: var(--accent);">0</div><div class="metric-sub">enforced by DB constraints</div></div>
+      <div class="metric-card"><div class="metric-label">Event publish time</div><div class="metric-value" style="color: var(--amber);">&lt;5m</div><div class="metric-sub">creation to published</div></div>
+      <div class="metric-card"><div class="metric-label">Mobile load time</div><div class="metric-value" style="color: var(--teal);">&lt;2s</div><div class="metric-sub">LCP on 4G</div></div>
+    </div>
+  </div>
+
+
+  <!-- ============================
+       02 · TDD
+  ============================= -->
+  <div class="doc-section" id="tdd">
+    <div class="section-eyebrow">02 — Technical Design Document</div>
+    <div class="section-title">Technical Design Document</div>
+
+    <h3>Technology stack</h3>
+    <div class="stack-grid">
+      <div class="stack-card"><div class="stack-concern">Framework</div><div class="stack-choice">Next.js 15 (App Router)</div><div class="stack-why">Server Components, streaming, Server Actions</div></div>
+      <div class="stack-card"><div class="stack-concern">Language</div><div class="stack-choice">TypeScript 5</div><div class="stack-why">End-to-end type safety with Drizzle</div></div>
+      <div class="stack-card"><div class="stack-concern">Database</div><div class="stack-choice">PostgreSQL · Neon</div><div class="stack-why">Serverless, ACID transactions, branching</div></div>
+      <div class="stack-card"><div class="stack-concern">ORM</div><div class="stack-choice">Drizzle ORM</div><div class="stack-why">Type-safe SQL, explicit queries, light bundle</div></div>
+      <div class="stack-card"><div class="stack-concern">Auth</div><div class="stack-choice">Clerk</div><div class="stack-why">Documented tradeoff vs Auth.js v5</div></div>
+      <div class="stack-card"><div class="stack-concern">Payments</div><div class="stack-choice">Stripe + Paystack</div><div class="stack-why">International + domestic NG/GH rails</div></div>
+      <div class="stack-card"><div class="stack-concern">Queue</div><div class="stack-choice">BullMQ · Upstash Redis</div><div class="stack-why">Reservation expiry, email jobs, retries</div></div>
+      <div class="stack-card"><div class="stack-concern">File storage</div><div class="stack-choice">Cloudflare R2</div><div class="stack-why">Egress-free, cost-efficient at scale</div></div>
+      <div class="stack-card"><div class="stack-concern">Email</div><div class="stack-choice">Resend + React Email</div><div class="stack-why">Transactional, composable templates</div></div>
+      <div class="stack-card"><div class="stack-concern">Styling</div><div class="stack-choice">Tailwind CSS + shadcn/ui</div><div class="stack-why">Design system velocity</div></div>
+      <div class="stack-card"><div class="stack-concern">Validation</div><div class="stack-choice">Zod</div><div class="stack-why">Schema-first, shared server/client</div></div>
+      <div class="stack-card"><div class="stack-concern">Testing</div><div class="stack-choice">Vitest + Playwright</div><div class="stack-why">Unit/integration + E2E</div></div>
+      <div class="stack-card"><div class="stack-concern">Error tracking</div><div class="stack-choice">Sentry</div><div class="stack-why">Frontend + backend error capture</div></div>
+      <div class="stack-card"><div class="stack-concern">Logging</div><div class="stack-choice">Axiom</div><div class="stack-why">Structured log ingestion with querying</div></div>
+      <div class="stack-card"><div class="stack-concern">Hosting</div><div class="stack-choice">Vercel</div><div class="stack-why">Edge network, preview deployments</div></div>
+    </div>
+
+    <h3>Architecture decisions (ADRs)</h3>
+
+    <div class="adr-card">
+      <div class="adr-id">ADR-001</div>
+      <div class="adr-title">PostgreSQL over MongoDB</div>
+      <div class="adr-decision">Decision: PostgreSQL via Neon (serverless)</div>
+      <div class="adr-body">Events, ticket types, orders, order items, and tickets are deeply relational. MongoDB's document model is the wrong fit — every meaningful query requires JOIN-like <code>$lookup</code> aggregations. PostgreSQL provides native ACID multi-statement transactions (critical for the reservation flow), real foreign key constraints with cascades, CHECK constraints that enforce business rules at the database level (e.g. <code>reserved + sold ≤ capacity</code>), and <code>pg_trgm</code> for full-text search without a separate service.</div>
+      <div class="adr-tradeoff">Tradeoff: requires schema migrations via Drizzle Kit. More upfront design time. Better data integrity, honesty about domain shape.</div>
+    </div>
+
+    <div class="adr-card">
+      <div class="adr-id">ADR-002</div>
+      <div class="adr-title">Drizzle ORM over Prisma</div>
+      <div class="adr-decision">Decision: Drizzle ORM</div>
+      <div class="adr-body">Drizzle generates explicit SQL that you can read and reason about. No n+1 query magic that hides behind abstraction. Lighter bundle, faster cold starts on Vercel Edge. Schema is defined as TypeScript objects, giving you full type inference in queries without a code generation step. Prisma is a valid alternative with a larger ecosystem, but for a portfolio project where demonstrating SQL literacy matters, Drizzle is the better signal.</div>
+      <div class="adr-tradeoff">Tradeoff: smaller ecosystem, less community tooling than Prisma. Acceptable for this scope.</div>
+    </div>
+
+    <div class="adr-card">
+      <div class="adr-id">ADR-003</div>
+      <div class="adr-title">Dual payment rails: Stripe + Paystack</div>
+      <div class="adr-decision">Decision: Both PSPs behind a single checkout abstraction in the order service</div>
+      <div class="adr-body">Stripe handles international card payments and diaspora users. Paystack handles NG/GH domestic cards, bank transfers, and USSD. The organizer's account currency determines the default PSP; attendees can switch at checkout. The <code>OrderService.createCheckout()</code> method accepts a <code>psp</code> parameter and returns a redirect URL, keeping PSP logic isolated. Webhooks are verified separately per PSP signature method and converge on the same order confirmation handler.</div>
+      <div class="adr-tradeoff">Tradeoff: dual webhook handlers, dual SDK dependencies, dual reconciliation logic. Worth it for the market differentiation story.</div>
+    </div>
+
+    <div class="adr-card">
+      <div class="adr-id">ADR-004</div>
+      <div class="adr-title">BullMQ + Upstash Redis for async jobs</div>
+      <div class="adr-decision">Decision: BullMQ with Upstash Redis (serverless-compatible)</div>
+      <div class="adr-body">Three categories of background work require a queue: reservation expiry (release inventory after 10-minute TTL), transactional emails (confirmation, reminders), and webhook retry logic with exponential backoff. Vercel serverless functions can't run persistent workers, so Upstash Redis provides the queue backend and a separate long-running worker process (deployed on Railway or Fly.io) consumes the queues. Upstash is pay-per-command with generous free tier.</div>
+      <div class="adr-tradeoff">Tradeoff: additional infrastructure component. Documented operational overhead is the honest cost of doing async jobs properly.</div>
+    </div>
+
+    <div class="adr-card">
+      <div class="adr-id">ADR-005</div>
+      <div class="adr-title">Cloudflare R2 over Uploadthing</div>
+      <div class="adr-decision">Decision: Cloudflare R2 for event cover images and attachments</div>
+      <div class="adr-body">Uploadthing is convenient but abstracts too much for a senior portfolio project. R2 is S3-compatible, has zero egress fees, and integrating it directly demonstrates cloud storage literacy. File uploads go through a signed URL flow: client requests a signed upload URL from the server, uploads directly to R2, then sends the resulting object key to the server. Server stores the key, constructs the public CDN URL. Cloudflare Images handles resize/optimization on delivery.</div>
+      <div class="adr-tradeoff">Tradeoff: more implementation work. Worth it — demonstrates real cloud integration vs. third-party wrapper dependency.</div>
+    </div>
+
+    <h3>System architecture</h3>
+    <pre>Browser / Mobile
+    │
+    ▼
+Next.js 15 (Vercel Edge + Node runtime)
+    ├── App Router pages (RSC — data fetching in component tree)
+    ├── Server Actions (thin wrappers — parse input, call service, return result)
+    └── API Routes
+          ├── /api/v1/*     (public REST API)
+          └── /api/webhooks/* (Stripe, Paystack — signature-verified)
+    │
+    ▼
+Service Layer (lib/services/)  ← Business logic lives here, no framework imports
+    ├── EventService
+    ├── TicketService      ← Atomic reservation logic
+    ├── OrderService       ← PSP abstraction, webhook handling
+    ├── CheckInService
+    └── NotificationService
+    │
+    ▼
+Repository Layer (lib/repositories/)  ← Drizzle queries only, no business logic
+    │
+    ├── PostgreSQL (Neon)      ← Primary data store
+    ├── Upstash Redis          ← Job queue backend (BullMQ)
+    └── Integrations (lib/integrations/)
+          ├── stripe.ts
+          ├── paystack.ts
+          ├── r2.ts          (Cloudflare R2)
+          └── resend.ts
+    │
+    ▼
+BullMQ Worker (Railway/Fly.io)  ← Long-running, consumes Upstash queues
+    ├── reservation-expiry.worker.ts
+    ├── email.worker.ts
+    └── webhook-retry.worker.ts</pre>
+
+    <h3>Critical flow: atomic ticket reservation</h3>
+    <p>This is the most important engineering decision in the entire system. The correct pattern is a database-level atomic update, not application-level inventory checking.</p>
+
+    <div class="callout callout-danger">
+      <span class="callout-icon">✕</span>
+      <span><strong>Wrong pattern (tutorial-grade):</strong> SELECT current stock → check in application → if available, INSERT order. This has a TOCTOU race condition that will oversell tickets under concurrent load.</span>
+    </div>
+
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-num">1</div>
+        <div>
+          <div class="flow-title">Client requests reservation</div>
+          <div class="flow-body"><code>POST /api/v1/reservations</code> — authenticated. Body: <code>{ ticket_type_id, quantity }</code></div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">2</div>
+        <div>
+          <div class="flow-title">Atomic inventory update in a single SQL statement</div>
+          <div class="flow-body">The UPDATE and the check are one atomic operation. If capacity is already exhausted, the WHERE clause fails to match and 0 rows are updated — no reservation created.</div>
+          <div class="flow-code">UPDATE ticket_types<br>SET reserved = reserved + $quantity<br>WHERE id = $id AND (capacity - reserved - sold) >= $quantity<br>RETURNING id, (capacity - reserved - sold) AS remaining</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">3</div>
+        <div>
+          <div class="flow-title">Reservation record written with 10-minute TTL</div>
+          <div class="flow-body">A <code>reservations</code> row is inserted with <code>expires_at = NOW() + INTERVAL '10 minutes'</code>. A BullMQ job is enqueued with the same delay.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">4</div>
+        <div>
+          <div class="flow-title">PSP checkout session created, client redirected</div>
+          <div class="flow-body">OrderService calls Stripe or Paystack, attaches <code>reservation_id</code> as metadata, and returns a checkout redirect URL. User completes payment externally.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">5</div>
+        <div>
+          <div class="flow-title">Webhook received and verified</div>
+          <div class="flow-body">Stripe or Paystack POSTs to <code>/api/webhooks/{psp}</code>. Signature is verified with HMAC. On payment success event: reservation → confirmed order, inventory <code>reserved</code> decremented, <code>sold</code> incremented. Ticket rows and QR codes generated. Confirmation email enqueued.</div>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-num">6</div>
+        <div>
+          <div class="flow-title">Expiry worker handles abandoned reservations</div>
+          <div class="flow-body">BullMQ job fires at TTL. Checks reservation status — if still <code>pending</code>, sets to <code>expired</code> and runs: <code>UPDATE ticket_types SET reserved = reserved - $quantity WHERE id = $id</code>. Inventory released.</div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Service layer structure</h3>
+    <p>Business logic is isolated from framework concerns. Services are plain TypeScript classes — no Next.js imports, no HTTP knowledge. This makes them unit-testable without spinning up an HTTP server.</p>
+    <pre>lib/
+├── services/
+│   ├── event.service.ts       // create, update, publish, cancel events
+│   ├── ticket.service.ts      // reservation, expiry, inventory queries
+│   ├── order.service.ts       // PSP abstraction, webhook processing
+│   ├── check-in.service.ts    // QR scan, duplicate detection
+│   └── notification.service.ts // email job enqueue
+├── repositories/
+│   ├── event.repo.ts          // Drizzle queries for events
+│   ├── ticket.repo.ts         // Drizzle queries — includes atomic UPDATE
+│   ├── order.repo.ts
+│   └── user.repo.ts
+├── integrations/
+│   ├── stripe.ts              // Stripe SDK wrapper
+│   ├── paystack.ts            // Paystack API wrapper
+│   ├── r2.ts                  // Cloudflare R2 signed URLs
+│   └── resend.ts              // Resend email client
+└── queue/
+    ├── producers.ts           // enqueue jobs
+    └── workers/
+        ├── reservation-expiry.worker.ts
+        ├── email.worker.ts
+        └── webhook-retry.worker.ts</pre>
+  </div>
+
+
+  <!-- ============================
+       03 · SCHEMA
+  ============================= -->
+  <div class="doc-section" id="schema">
+    <div class="section-eyebrow">03 — Database Schema</div>
+    <div class="section-title">Database Schema & ERD</div>
+
+    <p>PostgreSQL. All monetary values stored in the smallest currency unit (kobo for NGN, pesewas for GHS, cents for USD) as <code>BIGINT</code> to avoid floating-point precision errors. All IDs are <code>UUID</code> generated via <code>gen_random_uuid()</code>. Timestamps are <code>TIMESTAMPTZ</code>.</p>
+
+    <div class="callout callout-warn">
+      <span class="callout-icon">!</span>
+      <span>The <code>ticket_types</code> table contains a CHECK constraint <code>reserved + sold ≤ capacity</code>. This is the last line of defence against oversell — it enforces data integrity even if application-level logic fails.</span>
+    </div>
+
+    <h3>Core tables</h3>
+
+    <div class="sql-table">
+      <div class="sql-table-header">
+        <span class="sql-table-name">users</span>
+        <span class="sql-table-desc">Clerk-synced user records</span>
+      </div>
+      <div class="sql-cols">
+        <div class="sql-col"><span class="sql-col-name">id</span><span class="sql-col-type">UUID PK</span><span class="sql-col-desc">gen_random_uuid()</span></div>
+        <div class="sql-col"><span class="sql-col-name">clerk_id</span><span class="sql-col-type">TEXT UNIQUE</span><span class="sql-col-desc">Clerk user ID — webhook-synced</span></div>
+        <div class="sql-col"><span class="sql-col-name">email</span><span class="sql-col-type">TEXT UNIQUE</span><span class="sql-col-desc">NOT NULL</span></div>
+        <div class="sql-col"><span class="sql-col-name">full_name</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">NOT NULL</span></div>
+        <div class="sql-col"><span class="sql-col-name">avatar_url</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">R2 CDN URL</span></div>
+        <div class="sql-col"><span class="sql-col-name">created_at</span><span class="sql-col-type">TIMESTAMPTZ</span><span class="sql-col-desc">DEFAULT NOW()</span></div>
+      </div>
+    </div>
+
+    <div class="sql-table">
+      <div class="sql-table-header">
+        <span class="sql-table-name">organizations</span>
+        <span class="sql-table-desc">Event organizer accounts</span>
+      </div>
+      <div class="sql-cols">
+        <div class="sql-col"><span class="sql-col-name">id</span><span class="sql-col-type">UUID PK</span><span class="sql-col-desc"></span></div>
+        <div class="sql-col"><span class="sql-col-name">name</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">NOT NULL</span></div>
+        <div class="sql-col"><span class="sql-col-name">slug</span><span class="sql-col-type">TEXT UNIQUE</span><span class="sql-col-desc">URL-safe identifier</span></div>
+        <div class="sql-col"><span class="sql-col-name">description</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">Optional bio</span></div>
+        <div class="sql-col"><span class="sql-col-name">logo_url</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">R2 CDN URL</span></div>
+        <div class="sql-col"><span class="sql-col-name">created_at</span><span class="sql-col-type">TIMESTAMPTZ</span><span class="sql-col-desc">DEFAULT NOW()</span></div>
+      </div>
+    </div>
+
+    <div class="sql-table">
+      <div class="sql-table-header">
+        <span class="sql-table-name">org_members</span>
+        <span class="sql-table-desc">User ↔ organisation membership with roles</span>
+      </div>
+      <div class="sql-cols">
+        <div class="sql-col"><span class="sql-col-name">user_id</span><span class="sql-col-type">UUID FK</span><span class="sql-col-desc">→ users(id) ON DELETE CASCADE</span></div>
+        <div class="sql-col"><span class="sql-col-name">org_id</span><span class="sql-col-type">UUID FK</span><span class="sql-col-desc">→ organizations(id) ON DELETE CASCADE</span></div>
+        <div class="sql-col"><span class="sql-col-name">role</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">CHECK IN ('owner','admin','member')</span></div>
+        <div class="sql-col"><span class="sql-col-name">joined_at</span><span class="sql-col-type">TIMESTAMPTZ</span><span class="sql-col-desc">DEFAULT NOW()</span></div>
+        <div class="sql-col"><span class="sql-col-name">PRIMARY KEY</span><span class="sql-col-type"></span><span class="sql-col-desc">(user_id, org_id)</span></div>
+      </div>
+    </div>
+
+    <div class="sql-table">
+      <div class="sql-table-header">
+        <span class="sql-table-name">events</span>
+        <span class="sql-table-desc">Core event record</span>
+      </div>
+      <div class="sql-cols">
+        <div class="sql-col"><span class="sql-col-name">id</span><span class="sql-col-type">UUID PK</span><span class="sql-col-desc"></span></div>
+        <div class="sql-col"><span class="sql-col-name">org_id</span><span class="sql-col-type">UUID FK</span><span class="sql-col-desc">→ organizations(id) ON DELETE CASCADE</span></div>
+        <div class="sql-col"><span class="sql-col-name">title</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">NOT NULL</span></div>
+        <div class="sql-col"><span class="sql-col-name">slug</span><span class="sql-col-type">TEXT UNIQUE</span><span class="sql-col-desc">URL routing key</span></div>
+        <div class="sql-col"><span class="sql-col-name">description</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">Rich text content</span></div>
+        <div class="sql-col"><span class="sql-col-name">cover_url</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">R2 CDN URL</span></div>
+        <div class="sql-col"><span class="sql-col-name">location</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">Full address string</span></div>
+        <div class="sql-col"><span class="sql-col-name">venue_name</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">Display name (e.g. "Co-Creation Hub")</span></div>
+        <div class="sql-col"><span class="sql-col-name">starts_at</span><span class="sql-col-type">TIMESTAMPTZ</span><span class="sql-col-desc">NOT NULL</span></div>
+        <div class="sql-col"><span class="sql-col-name">ends_at</span><span class="sql-col-type">TIMESTAMPTZ</span><span class="sql-col-desc">NOT NULL</span></div>
+        <div class="sql-col"><span class="sql-col-name">timezone</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">DEFAULT 'Africa/Lagos'</span></div>
+        <div class="sql-col"><span class="sql-col-name">status</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">CHECK IN ('draft','published','cancelled','completed')</span></div>
+        <div class="sql-col"><span class="sql-col-name">category</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">tech, fintech, cultural, workshop, ...</span></div>
+        <div class="sql-col"><span class="sql-col-name">search_vector</span><span class="sql-col-type">TSVECTOR</span><span class="sql-col-desc">Generated column for FTS</span></div>
+      </div>
+    </div>
+
+    <div class="sql-table">
+      <div class="sql-table-header">
+        <span class="sql-table-name">ticket_types</span>
+        <span class="sql-table-desc">Inventory ledger — the concurrency-critical table</span>
+      </div>
+      <div class="sql-cols">
+        <div class="sql-col"><span class="sql-col-name">id</span><span class="sql-col-type">UUID PK</span><span class="sql-col-desc"></span></div>
+        <div class="sql-col"><span class="sql-col-name">event_id</span><span class="sql-col-type">UUID FK</span><span class="sql-col-desc">→ events(id) ON DELETE CASCADE</span></div>
+        <div class="sql-col"><span class="sql-col-name">name</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">'General Admission', 'VIP', 'Early Bird'</span></div>
+        <div class="sql-col"><span class="sql-col-name">price_kobo</span><span class="sql-col-type">BIGINT</span><span class="sql-col-desc">Smallest currency unit. 0 = free</span></div>
+        <div class="sql-col"><span class="sql-col-name">currency</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">DEFAULT 'NGN'. ISO 4217</span></div>
+        <div class="sql-col"><span class="sql-col-name">capacity</span><span class="sql-col-type">INTEGER</span><span class="sql-col-desc">Total available slots</span></div>
+        <div class="sql-col"><span class="sql-col-name">reserved</span><span class="sql-col-type">INTEGER</span><span class="sql-col-desc">DEFAULT 0 — active reservations</span></div>
+        <div class="sql-col"><span class="sql-col-name">sold</span><span class="sql-col-type">INTEGER</span><span class="sql-col-desc">DEFAULT 0 — confirmed orders</span></div>
+        <div class="sql-col"><span class="sql-col-name">CHECK</span><span class="sql-col-type"></span><span class="sql-col-desc">reserved + sold ≤ capacity  ← DB-level oversell guard</span></div>
+        <div class="sql-col"><span class="sql-col-name">sale_starts_at</span><span class="sql-col-type">TIMESTAMPTZ</span><span class="sql-col-desc">Nullable — early bird windows</span></div>
+        <div class="sql-col"><span class="sql-col-name">sale_ends_at</span><span class="sql-col-type">TIMESTAMPTZ</span><span class="sql-col-desc">Nullable</span></div>
+        <div class="sql-col"><span class="sql-col-name">is_visible</span><span class="sql-col-type">BOOLEAN</span><span class="sql-col-desc">DEFAULT TRUE — hide sold-out types</span></div>
+      </div>
+    </div>
+
+    <div class="sql-table">
+      <div class="sql-table-header">
+        <span class="sql-table-name">reservations</span>
+        <span class="sql-table-desc">10-minute TTL holds on inventory</span>
+      </div>
+      <div class="sql-cols">
+        <div class="sql-col"><span class="sql-col-name">id</span><span class="sql-col-type">UUID PK</span><span class="sql-col-desc"></span></div>
+        <div class="sql-col"><span class="sql-col-name">user_id</span><span class="sql-col-type">UUID FK</span><span class="sql-col-desc">→ users(id)</span></div>
+        <div class="sql-col"><span class="sql-col-name">ticket_type_id</span><span class="sql-col-type">UUID FK</span><span class="sql-col-desc">→ ticket_types(id)</span></div>
+        <div class="sql-col"><span class="sql-col-name">quantity</span><span class="sql-col-type">INTEGER</span><span class="sql-col-desc">NOT NULL</span></div>
+        <div class="sql-col"><span class="sql-col-name">expires_at</span><span class="sql-col-type">TIMESTAMPTZ</span><span class="sql-col-desc">NOW() + INTERVAL '10 minutes'</span></div>
+        <div class="sql-col"><span class="sql-col-name">status</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">CHECK IN ('pending','converted','expired')</span></div>
+      </div>
+    </div>
+
+    <div class="sql-table">
+      <div class="sql-table-header">
+        <span class="sql-table-name">orders</span>
+        <span class="sql-table-desc">Payment records — one per checkout session</span>
+      </div>
+      <div class="sql-cols">
+        <div class="sql-col"><span class="sql-col-name">id</span><span class="sql-col-type">UUID PK</span><span class="sql-col-desc"></span></div>
+        <div class="sql-col"><span class="sql-col-name">user_id</span><span class="sql-col-type">UUID FK</span><span class="sql-col-desc">→ users(id)</span></div>
+        <div class="sql-col"><span class="sql-col-name">event_id</span><span class="sql-col-type">UUID FK</span><span class="sql-col-desc">→ events(id)</span></div>
+        <div class="sql-col"><span class="sql-col-name">psp</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">CHECK IN ('stripe','paystack')</span></div>
+        <div class="sql-col"><span class="sql-col-name">psp_reference</span><span class="sql-col-type">TEXT UNIQUE</span><span class="sql-col-desc">PSP session/transaction ID</span></div>
+        <div class="sql-col"><span class="sql-col-name">amount_kobo</span><span class="sql-col-type">BIGINT</span><span class="sql-col-desc">Total charged</span></div>
+        <div class="sql-col"><span class="sql-col-name">currency</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">ISO 4217</span></div>
+        <div class="sql-col"><span class="sql-col-name">status</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">CHECK IN ('pending','confirmed','refunded','failed')</span></div>
+        <div class="sql-col"><span class="sql-col-name">idempotency_key</span><span class="sql-col-type">TEXT UNIQUE</span><span class="sql-col-desc">Prevent duplicate webhook processing</span></div>
+      </div>
+    </div>
+
+    <div class="sql-table">
+      <div class="sql-table-header">
+        <span class="sql-table-name">tickets</span>
+        <span class="sql-table-desc">Individual scannable tickets issued post-payment</span>
+      </div>
+      <div class="sql-cols">
+        <div class="sql-col"><span class="sql-col-name">id</span><span class="sql-col-type">UUID PK</span><span class="sql-col-desc"></span></div>
+        <div class="sql-col"><span class="sql-col-name">order_id</span><span class="sql-col-type">UUID FK</span><span class="sql-col-desc">→ orders(id)</span></div>
+        <div class="sql-col"><span class="sql-col-name">ticket_type_id</span><span class="sql-col-type">UUID FK</span><span class="sql-col-desc">→ ticket_types(id)</span></div>
+        <div class="sql-col"><span class="sql-col-name">qr_code</span><span class="sql-col-type">TEXT UNIQUE</span><span class="sql-col-desc">Signed JWT payload. Verified on scan</span></div>
+        <div class="sql-col"><span class="sql-col-name">attendee_name</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">May differ from account holder</span></div>
+        <div class="sql-col"><span class="sql-col-name">attendee_email</span><span class="sql-col-type">TEXT</span><span class="sql-col-desc">For ticket delivery</span></div>
+        <div class="sql-col"><span class="sql-col-name">checked_in_at</span><span class="sql-col-type">TIMESTAMPTZ</span><span class="sql-col-desc">NULL until scan</span></div>
+        <div class="sql-col"><span class="sql-col-name">checked_in_by</span><span class="sql-col-type">UUID FK</span><span class="sql-col-desc">→ users(id) — the operator who scanned</span></div>
+      </div>
+    </div>
+
+    <h3>Indexing strategy</h3>
+    <div class="index-list">
+      <div class="index-item"><span class="index-expr">events(org_id)</span><span class="index-why">Organizer dashboard — fetch all events for an org</span></div>
+      <div class="index-item"><span class="index-expr">events(status, starts_at)</span><span class="index-why">Public discovery — published events sorted by date</span></div>
+      <div class="index-item"><span class="index-expr">events(slug)</span><span class="index-why">URL routing — event page lookup by slug</span></div>
+      <div class="index-item"><span class="index-expr">events USING GIN (search_vector)</span><span class="index-why">Full-text search via tsvector GIN index</span></div>
+      <div class="index-item"><span class="index-expr">ticket_types(event_id)</span><span class="index-why">Event page ticket type listing</span></div>
+      <div class="index-item"><span class="index-expr">reservations(expires_at, status)</span><span class="index-why">Expiry worker queries for pending+expired rows</span></div>
+      <div class="index-item"><span class="index-expr">orders(psp_reference)</span><span class="index-why">Webhook handler — look up order by PSP transaction ID</span></div>
+      <div class="index-item"><span class="index-expr">orders(user_id)</span><span class="index-why">Attendee order history</span></div>
+      <div class="index-item"><span class="index-expr">tickets(qr_code)</span><span class="index-why">Check-in scan — must be sub-100ms</span></div>
+      <div class="index-item"><span class="index-expr">tickets(order_id)</span><span class="index-why">Order detail — fetch all tickets for an order</span></div>
+    </div>
+  </div>
+
+
+  <!-- ============================
+       04 · API SPEC
+  ============================= -->
+  <div class="doc-section" id="api">
+    <div class="section-eyebrow">04 — API Specification</div>
+    <div class="section-title">API Specification</div>
+
+    <p>Base URL: <code>/api/v1</code>. All responses are JSON. Authentication via Clerk session cookie (web) or <code>Authorization: Bearer &lt;jwt&gt;</code> (mobile/API clients). All write endpoints validate input with Zod schemas before hitting the service layer.</p>
+
+    <div class="callout callout-info">
+      <span class="callout-icon">→</span>
+      <span>Webhook endpoints at <code>/api/webhooks/stripe</code> and <code>/api/webhooks/paystack</code> are outside the versioned API. They use raw body parsing for signature verification and must never be behind authentication middleware.</span>
+    </div>
+
+    <div class="endpoint-group">
+      <div class="endpoint-group-title">Events</div>
+      <div class="endpoint-row"><span class="badge badge-get">GET</span><span class="endpoint-path">/events</span><span class="endpoint-desc">Public event discovery. Query params: q (search), category, location, from, to, page, limit</span><span class="endpoint-auth">Public</span></div>
+      <div class="endpoint-row"><span class="badge badge-get">GET</span><span class="endpoint-path">/events/:slug</span><span class="endpoint-desc">Single event detail. Includes ticket types and org info</span><span class="endpoint-auth">Public</span></div>
+      <div class="endpoint-row"><span class="badge badge-post">POST</span><span class="endpoint-path">/events</span><span class="endpoint-desc">Create event. Body: title, slug, description, location, starts_at, ends_at, timezone, category, cover_url, org_id</span><span class="endpoint-auth">Auth · Admin+</span></div>
+      <div class="endpoint-row"><span class="badge badge-patch">PATCH</span><span class="endpoint-path">/events/:id</span><span class="endpoint-desc">Update event fields. Partial update — only provided fields changed</span><span class="endpoint-auth">Auth · Admin+</span></div>
+      <div class="endpoint-row"><span class="badge badge-patch">PATCH</span><span class="endpoint-path">/events/:id/publish</span><span class="endpoint-desc">Transition status: draft → published. Validates at least one ticket type exists</span><span class="endpoint-auth">Auth · Admin+</span></div>
+      <div class="endpoint-row"><span class="badge badge-delete">DELETE</span><span class="endpoint-path">/events/:id</span><span class="endpoint-desc">Soft delete (status = cancelled). Hard delete only if no confirmed orders</span><span class="endpoint-auth">Auth · Owner</span></div>
+    </div>
+
+    <div class="endpoint-group">
+      <div class="endpoint-group-title">Ticket types</div>
+      <div class="endpoint-row"><span class="badge badge-get">GET</span><span class="endpoint-path">/events/:id/ticket-types</span><span class="endpoint-desc">All ticket types for event. Public shows visible only; admin sees all including hidden</span><span class="endpoint-auth">Public / Auth</span></div>
+      <div class="endpoint-row"><span class="badge badge-post">POST</span><span class="endpoint-path">/events/:id/ticket-types</span><span class="endpoint-desc">Create ticket type. Body: name, price_kobo, currency, capacity, sale_starts_at, sale_ends_at</span><span class="endpoint-auth">Auth · Admin+</span></div>
+      <div class="endpoint-row"><span class="badge badge-patch">PATCH</span><span class="endpoint-path">/ticket-types/:id</span><span class="endpoint-desc">Update type. Cannot reduce capacity below (reserved + sold)</span><span class="endpoint-auth">Auth · Admin+</span></div>
+      <div class="endpoint-row"><span class="badge badge-delete">DELETE</span><span class="endpoint-path">/ticket-types/:id</span><span class="endpoint-desc">Delete only if no confirmed sales against this type</span><span class="endpoint-auth">Auth · Admin+</span></div>
+    </div>
+
+    <div class="endpoint-group">
+      <div class="endpoint-group-title">Reservations</div>
+      <div class="endpoint-row"><span class="badge badge-post">POST</span><span class="endpoint-path">/reservations</span><span class="endpoint-desc">Atomic inventory hold. Body: ticket_type_id, quantity. Returns reservation ID + expires_at. 409 if sold out</span><span class="endpoint-auth">Auth</span></div>
+      <div class="endpoint-row"><span class="badge badge-delete">DELETE</span><span class="endpoint-path">/reservations/:id</span><span class="endpoint-desc">Explicit release. Runs inventory restore UPDATE immediately</span><span class="endpoint-auth">Auth · Own</span></div>
+    </div>
+
+    <div class="endpoint-group">
+      <div class="endpoint-group-title">Checkout</div>
+      <div class="endpoint-row"><span class="badge badge-post">POST</span><span class="endpoint-path">/checkout</span><span class="endpoint-desc">Create PSP session. Body: reservation_id, psp ('stripe'|'paystack'), return_url. Returns: redirect_url</span><span class="endpoint-auth">Auth</span></div>
+      <div class="endpoint-row"><span class="badge badge-get">GET</span><span class="endpoint-path">/checkout/verify</span><span class="endpoint-desc">Post-payment return check. Query: psp_reference. Returns order status for success/failure page</span><span class="endpoint-auth">Auth</span></div>
+    </div>
+
+    <div class="endpoint-group">
+      <div class="endpoint-group-title">Orders</div>
+      <div class="endpoint-row"><span class="badge badge-get">GET</span><span class="endpoint-path">/orders</span><span class="endpoint-desc">Current user's order history</span><span class="endpoint-auth">Auth</span></div>
+      <div class="endpoint-row"><span class="badge badge-get">GET</span><span class="endpoint-path">/orders/:id</span><span class="endpoint-desc">Order detail with tickets. Own orders only (admins can view all for their events)</span><span class="endpoint-auth">Auth</span></div>
+      <div class="endpoint-row"><span class="badge badge-get">GET</span><span class="endpoint-path">/events/:id/orders</span><span class="endpoint-desc">All orders for an event. Organizer view. Supports CSV export via Accept: text/csv header</span><span class="endpoint-auth">Auth · Admin+</span></div>
+    </div>
+
+    <div class="endpoint-group">
+      <div class="endpoint-group-title">Check-in (Phase 2)</div>
+      <div class="endpoint-row"><span class="badge badge-post">POST</span><span class="endpoint-path">/tickets/:id/check-in</span><span class="endpoint-desc">Mark ticket as used. Body: scanned_qr_code. Verifies JWT signature. 409 if already checked in (returns original check-in timestamp)</span><span class="endpoint-auth">Auth · Member+</span></div>
+    </div>
+
+    <div class="endpoint-group">
+      <div class="endpoint-group-title">Webhooks (outside /api/v1)</div>
+      <div class="endpoint-row"><span class="badge badge-post">POST</span><span class="endpoint-path">/api/webhooks/stripe</span><span class="endpoint-desc">Stripe-signature verified. Handles checkout.session.completed, payment_intent.payment_failed</span><span class="endpoint-auth">Stripe HMAC</span></div>
+      <div class="endpoint-row"><span class="badge badge-post">POST</span><span class="endpoint-path">/api/webhooks/paystack</span><span class="endpoint-desc">Paystack-signature verified. Handles charge.success, transfer.failed</span><span class="endpoint-auth">Paystack HMAC</span></div>
+    </div>
+
+    <h3>Error response format</h3>
+    <pre>{
+  "error": {
+    "code": "TICKET_SOLD_OUT",         // machine-readable string
+    "message": "No tickets remaining", // human-readable
+    "status": 409,
+    "details": {}                      // optional — validation errors etc.
+  }
+}</pre>
+
+    <h3>Standard error codes</h3>
+    <table>
+      <thead><tr><th>Code</th><th>HTTP</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>UNAUTHORIZED</code></td><td>401</td><td>Missing or invalid session</td></tr>
+        <tr><td><code>FORBIDDEN</code></td><td>403</td><td>Authenticated but insufficient role</td></tr>
+        <tr><td><code>NOT_FOUND</code></td><td>404</td><td>Resource does not exist or is not accessible to this user</td></tr>
+        <tr><td><code>TICKET_SOLD_OUT</code></td><td>409</td><td>Atomic UPDATE returned 0 rows — no inventory available</td></tr>
+        <tr><td><code>RESERVATION_EXPIRED</code></td><td>409</td><td>Reservation TTL elapsed before checkout completed</td></tr>
+        <tr><td><code>ALREADY_CHECKED_IN</code></td><td>409</td><td>QR code already scanned. Response includes original timestamp</td></tr>
+        <tr><td><code>VALIDATION_ERROR</code></td><td>422</td><td>Zod schema failure. details contains field-level errors</td></tr>
+        <tr><td><code>RATE_LIMITED</code></td><td>429</td><td>Too many requests. Retry-After header provided</td></tr>
+        <tr><td><code>INTERNAL_ERROR</code></td><td>500</td><td>Unhandled exception — Sentry event ID included in response</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Rate limiting policy</h3>
+    <table>
+      <thead><tr><th>Endpoint group</th><th>Limit</th><th>Window</th></tr></thead>
+      <tbody>
+        <tr><td>Public (unauthenticated)</td><td>60 requests</td><td>per minute per IP</td></tr>
+        <tr><td>Authenticated reads</td><td>300 requests</td><td>per minute per user</td></tr>
+        <tr><td><code>POST /reservations</code></td><td>10 requests</td><td>per minute per user (anti-scalper)</td></tr>
+        <tr><td><code>POST /checkout</code></td><td>5 requests</td><td>per minute per user</td></tr>
+        <tr><td>Webhooks</td><td>Unlimited</td><td>IP allowlisted to PSP CIDR ranges</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+
+  <!-- ============================
+       05 · SECURITY CHECKLIST
+  ============================= -->
+  <div class="doc-section" id="security">
+    <div class="section-eyebrow">05 — Security & Pre-Deployment</div>
+    <div class="section-title">Security & Pre-Deployment Checklist</div>
+
+    <p>Every item below must be verified before any public-facing deployment. Tick each only after you can demonstrate it works — not just that it is configured.</p>
+
+    <div class="checklist-grid">
+
+      <div class="check-category">
+        <div class="check-cat-title">Authentication & authorization</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Role-based access: owner / admin / member enforced in service layer, not just UI<div class="check-note">Test: member attempting admin action must receive 403, not just be hidden in UI</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Users can only access their own orders and tickets — no IDOR<div class="check-note">Test: fetch /orders/:id belonging to another user → 404 (not 403 — don't leak resource existence)</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Organizer-only endpoints (order lists, attendee data) gated by org membership<div class="check-note">Verify via JWT claims + DB membership check, not just frontend routing</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Webhook endpoints have no auth middleware — only HMAC signature verification<div class="check-note">Never use Clerk middleware on /api/webhooks/* routes</div></div></div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-title">Session & credential security</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Session cookies: httpOnly=true, Secure=true, SameSite=Lax<div class="check-note">Clerk handles this — verify in browser DevTools → Application → Cookies</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">CSRF protection active for all state-mutating endpoints<div class="check-note">Clerk's session tokens include CSRF protection by default. Verify Server Actions use it correctly</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">No secrets in client-side code or NEXT_PUBLIC_ env vars<div class="check-note">Run: grep -r "NEXT_PUBLIC_" .env.local — only publishable keys should appear there</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">All secrets in Vercel env — never in .env files committed to git<div class="check-note">Verify .env.local is in .gitignore. Add pre-commit hook to block accidental commits</div></div></div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-title">Transport security</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">HTTPS enforced everywhere — HTTP requests redirect 301 to HTTPS<div class="check-note">Vercel enforces this automatically. Verify via curl -I http://yourdomain.com</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">HSTS header: max-age ≥ 31536000; includeSubDomains<div class="check-note">Add in next.config.js headers(). Test via securityheaders.com</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">No mixed content — all assets served over HTTPS<div class="check-note">Browser console will show mixed content warnings. R2/Cloudflare CDN URLs must be https://</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Security headers: X-Frame-Options, X-Content-Type-Options, Referrer-Policy, CSP<div class="check-note">Configure in next.config.js headers(). Use report-only mode for CSP initially</div></div></div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-title">Input validation & injection</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">All API inputs validated with Zod schemas before reaching service layer<div class="check-note">Validation must happen server-side — never trust client-side only</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">No raw string interpolation in SQL — Drizzle parameterises all queries<div class="check-note">Never use db.execute(sql`... ${userInput} ...`). Use Drizzle query builders exclusively</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Rich text description fields sanitised (DOMPurify or equivalent) before storage and render<div class="check-note">If using a rich text editor, sanitise on server before DB write and on client before render</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Slug and search query inputs stripped of special characters<div class="check-note">Slug: /[^a-z0-9-]/g. Search: strip SQL metacharacters before FTS query construction</div></div></div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-title">File upload protection</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">MIME type validation server-side — not Content-Type header (spoofable)<div class="check-note">Use file-type npm package to inspect magic bytes. Reject non-image uploads to cover upload endpoint</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">File size limit enforced: 5MB max for event covers<div class="check-note">Validate in R2 pre-signed URL generation. Return 400 for oversized uploads</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Uploaded files stored in isolated R2 bucket — not in public web root<div class="check-note">Access via Cloudflare CDN URL only. No direct execution path</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Filename sanitised before storage — random UUID key in R2, never original filename<div class="check-note">Original filename stored in DB for display only. R2 key = <code>${uuid}.{ext}</code></div></div></div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-title">API hardening</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">CORS: approved origins only. Localhost in development, prod domain in production<div class="check-note">Configure in next.config.js. Webhook routes must allow PSP IPs, not wildcard</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Rate limiting on all public endpoints (Upstash Ratelimit or Vercel middleware)<div class="check-note">Reservation endpoint: 10/min/user. General API: 60/min/IP. Return 429 with Retry-After</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">API versioned: /api/v1. Breaking changes get a new version, not silent updates<div class="check-note">Document deprecation timeline before removing v1 endpoints</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Error responses never leak stack traces, DB schema, or internal paths<div class="check-note">Catch-all error handler returns generic INTERNAL_ERROR with Sentry event ID only</div></div></div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-title">Caching strategy</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Event listing pages cached at CDN edge (Vercel) — revalidated on publish/update<div class="check-note">Use Next.js revalidatePath() on event mutation. CDN cache serves stale while revalidating</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Ticket availability counts NOT cached — always fresh from DB<div class="check-note">Stale availability data risks showing "available" when sold out. Zero caching on inventory</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Cloudflare CDN serves R2 assets with long-lived Cache-Control (1 year, immutable)<div class="check-note">Content-addressed filenames (UUID) mean old URLs are always valid — safe to cache forever</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Cache invalidation documented for every cached resource<div class="check-note">Who calls revalidatePath? On what events? Write it down now or debug it in production</div></div></div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-title">Database & data</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">All indexes from schema plan created and verified with EXPLAIN ANALYZE<div class="check-note">Run EXPLAIN ANALYZE on the 5 most critical queries before launch</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Database credentials in Vercel env only — never in code or logs<div class="check-note">Grep codebase for connection string patterns before every deploy</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Neon database backups enabled and tested<div class="check-note">Restore a backup to a branch. Verify data integrity. "Backups enabled" ≠ "backups work"</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Connection pooling configured (PgBouncer via Neon pooled connection string)<div class="check-note">Serverless functions open many short connections. Use pooled URL for all app queries</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">NDPR: user data deletion workflow implemented — delete account removes PII<div class="check-note">Orders anonymised (attendee_name/email nulled), not hard deleted, for financial audit trail</div></div></div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-title">Frontend resilience</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Error boundaries on all client components — users see clean fallback, not crash<div class="check-note">Wrap route segments in error.tsx. Test by deliberately throwing in a component</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Loading states on all async operations — no invisible pending state<div class="check-note">Every button that triggers a server mutation must show loading feedback</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Form re-submission prevention — disable submit button on pending<div class="check-note">useFormStatus() or manual isPending state. Double-submit on slow connections is common</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Accessible: keyboard navigable, screen reader tested, 4.5:1 contrast<div class="check-note">Test with axe DevTools browser extension. Fix all critical and serious violations</div></div></div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-title">SEO & metadata</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Open Graph tags on all public event pages (og:title, og:image, og:description)<div class="check-note">Test with opengraph.xyz. Event cover image must be the og:image</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Dynamic sitemap at /sitemap.xml — includes all published event URLs<div class="check-note">Use Next.js sitemap.ts convention. Regenerate on event publish/unpublish</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">robots.txt: allow public pages, disallow /dashboard and API routes<div class="check-note">Verify dashboard and organizer routes are excluded from search indexing</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Canonical URLs on all pages — prevent duplicate content from ?query params<div class="check-note">Add canonical link element via Next.js metadata API</div></div></div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-title">Infrastructure & deployment</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Health check endpoint: GET /api/health — returns 200 + DB connectivity status<div class="check-note">Vercel runs health checks on deployment. Catches DB connectivity failures before traffic arrives</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Dependency audit: npm audit — zero critical or high vulnerabilities<div class="check-note">Run before every deploy. Add to CI pipeline. Dependabot enabled on GitHub repo</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Environment-specific configs: development / preview / production separation<div class="check-note">Preview deployments use separate Neon branch DB. Never connect preview to production DB</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Feature flags configured for unreleased Phase 2 code<div class="check-note">Use environment variable flags or a service like Vercel Edge Config. Never ship dead code paths without a flag</div></div></div>
+      </div>
+
+      <div class="check-category">
+        <div class="check-cat-title">CI/CD safeguards</div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">GitHub Actions: lint → typecheck → unit tests → build on every PR<div class="check-note">Merge to main blocked if any step fails. No exceptions</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Playwright E2E tests run on preview deployment before production promotion<div class="check-note">Critical paths: create event → purchase ticket → verify order. Automate these three minimum</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">Rollback procedure documented and tested — not just theorised<div class="check-note">Vercel: revert to previous deployment takes 30s. DB migrations must be backwards-compatible for zero-downtime</div></div></div>
+        <div class="check-item"><div class="check-box"></div><div class="check-label">All DB migrations tested on Neon preview branch before running on production<div class="check-note">Drizzle Kit: drizzle-kit migrate on branch → verify → merge → migrate on production</div></div></div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ============================
+       06 · ROADMAP
+  ============================= -->
+  <div class="doc-section" id="roadmap">
+    <div class="section-eyebrow">06 — Project Roadmap</div>
+    <div class="section-title">Project Roadmap & Sprint Plan</div>
+
+    <p>Three phases. Phase 1 alone, built correctly, is a stronger portfolio piece than most "full-stack projects." Resist scope creep into Phase 2 before Phase 1 has production-grade test coverage and observability.</p>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="badge badge-p1">Phase 1</span>
+        <span class="phase-title">Core platform</span>
+        <span class="phase-timeline">Weeks 1–8</span>
+      </div>
+      <div class="phase-grid">
+        <div class="phase-epic">
+          <div class="epic-title">Sprint 1–2 · Foundation</div>
+          <ul class="epic-items">
+            <li>Drizzle schema + migrations</li>
+            <li>Clerk auth integration</li>
+            <li>Org + member management</li>
+            <li>R2 file upload flow</li>
+            <li>CI/CD pipeline</li>
+          </ul>
+        </div>
+        <div class="phase-epic">
+          <div class="epic-title">Sprint 3–4 · Events</div>
+          <ul class="epic-items">
+            <li>Event CRUD + publishing</li>
+            <li>Ticket type management</li>
+            <li>Public event pages</li>
+            <li>Discovery + FTS search</li>
+          </ul>
+        </div>
+        <div class="phase-epic">
+          <div class="epic-title">Sprint 5–6 · Payments</div>
+          <ul class="epic-items">
+            <li>Atomic reservation endpoint</li>
+            <li>Stripe checkout + webhook</li>
+            <li>Paystack checkout + webhook</li>
+            <li>QR ticket generation</li>
+            <li>Resend confirmation email</li>
+          </ul>
+        </div>
+        <div class="phase-epic">
+          <div class="epic-title">Sprint 7–8 · Polish</div>
+          <ul class="epic-items">
+            <li>Organizer dashboard</li>
+            <li>BullMQ expiry worker</li>
+            <li>Sentry + Axiom setup</li>
+            <li>Security hardening</li>
+            <li>Load test + fix</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="badge badge-p2">Phase 2</span>
+        <span class="phase-title">Operational features</span>
+        <span class="phase-timeline">Weeks 9–14</span>
+      </div>
+      <div class="phase-grid">
+        <div class="phase-epic">
+          <div class="epic-title">Sprint 9–10 · Check-in</div>
+          <ul class="epic-items">
+            <li>QR scanner UI (mobile-first)</li>
+            <li>Check-in service + duplicate detection</li>
+            <li>Real-time count via SSE</li>
+            <li>Operator role + access</li>
+          </ul>
+        </div>
+        <div class="phase-epic">
+          <div class="epic-title">Sprint 11–12 · Waitlist</div>
+          <ul class="epic-items">
+            <li>Waitlist registration flow</li>
+            <li>Auto-promotion on release</li>
+            <li>Queue position email</li>
+            <li>Organizer waitlist view</li>
+          </ul>
+        </div>
+        <div class="phase-epic">
+          <div class="epic-title">Sprint 13–14 · Promo codes</div>
+          <ul class="epic-items">
+            <li>Discount code creation</li>
+            <li>Percentage + flat discount</li>
+            <li>Usage limit enforcement</li>
+            <li>Code validation at checkout</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-block">
+      <div class="phase-header">
+        <span class="badge badge-p3">Phase 3</span>
+        <span class="phase-title">Analytics & intelligence</span>
+        <span class="phase-timeline">Weeks 15–20</span>
+      </div>
+      <div class="phase-grid">
+        <div class="phase-epic">
+          <div class="epic-title">Sprint 15–17 · Analytics</div>
+          <ul class="epic-items">
+            <li>Traffic source tracking</li>
+            <li>Purchase funnel metrics</li>
+            <li>Revenue trends chart</li>
+            <li>Ticket type conversion rates</li>
+          </ul>
+        </div>
+        <div class="phase-epic">
+          <div class="epic-title">Sprint 18–20 · Advanced</div>
+          <ul class="epic-items">
+            <li>Event duplication</li>
+            <li>Co-organizer invites</li>
+            <li>Recurring event support</li>
+            <li>Embedded ticket widget</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ============================
+       07 · QA
+  ============================= -->
+  <div class="doc-section" id="qa">
+    <div class="section-eyebrow">07 — QA & Testing Strategy</div>
+    <div class="section-title">QA & Testing Strategy</div>
+
+    <h3>Testing pyramid</h3>
+
+    <table>
+      <thead><tr><th>Layer</th><th>Tool</th><th>Coverage target</th><th>What to test</th></tr></thead>
+      <tbody>
+        <tr><td>Unit</td><td>Vitest</td><td>Service layer — 80%+</td><td>Business logic in isolation. No DB, no HTTP. Mock repositories</td></tr>
+        <tr><td>Integration</td><td>Vitest + Neon branch</td><td>Repository + API routes</td><td>Drizzle queries against real DB. API endpoints with real auth mocked</td></tr>
+        <tr><td>E2E</td><td>Playwright</td><td>Critical user journeys</td><td>Full browser flows against preview deployment</td></tr>
+        <tr><td>Load</td><td>k6</td><td>Reservation concurrency</td><td>100 concurrent ticket reservations — zero oversell</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Unit test priorities</h3>
+    <p>Test service layer functions exhaustively — this is where business rules live.</p>
+    <pre>// ticket.service.test.ts — critical cases
+
+describe('TicketService.reserve()', () => {
+  it('returns reservation when inventory available')
+  it('throws TICKET_SOLD_OUT when capacity exhausted')
+  it('throws TICKET_SOLD_OUT under race condition (concurrent reservations)')
+  it('does not reserve more than quantity param')
+  it('throws when sale window has not opened')
+  it('throws when sale window has closed')
+})
+
+describe('OrderService.processWebhook()', () => {
+  it('converts reservation to confirmed order on success event')
+  it('is idempotent — duplicate webhook calls do not double-confirm')
+  it('releases reservation inventory on payment failure')
+  it('rejects webhook with invalid signature')
+})</pre>
+
+    <h3>Critical E2E flows (Playwright)</h3>
+    <div class="req-list">
+      <div class="req-row"><span class="req-id">E2E-01</span><div class="req-text"><strong>Full ticket purchase (Stripe)</strong><small>Create account → create org → create event → publish → purchase GA ticket → verify QR ticket in email</small></div><span class="badge badge-critical">Must pass</span></div>
+      <div class="req-row"><span class="req-id">E2E-02</span><div class="req-text"><strong>Sold-out behaviour</strong><small>Set capacity to 1 → two concurrent purchasers → verify exactly one succeeds, one receives sold-out error</small></div><span class="badge badge-critical">Must pass</span></div>
+      <div class="req-row"><span class="req-id">E2E-03</span><div class="req-text"><strong>Reservation expiry</strong><small>Reserve ticket → do not complete checkout → wait for TTL → verify inventory released</small></div><span class="badge badge-p1">Must pass</span></div>
+      <div class="req-row"><span class="req-id">E2E-04</span><div class="req-text"><strong>Organizer dashboard</strong><small>After confirmed order → dashboard shows correct revenue and attendee count → CSV export contains correct row</small></div><span class="badge badge-p1">Must pass</span></div>
+      <div class="req-row"><span class="req-id">E2E-05</span><div class="req-text"><strong>Role enforcement</strong><small>Member role cannot access event management. Unauthenticated user cannot access dashboard routes</small></div><span class="badge badge-p1">Must pass</span></div>
+    </div>
+
+    <h3>Load test: concurrency scenario</h3>
+    <pre>// k6 load test — concurrent reservation race
+import http from 'k6/http';
+import { check } from 'k6';
+
+export let options = {
+  vus: 100,          // 100 virtual users
+  duration: '10s',   // all fire simultaneously
+};
+
+// Before test: create event with capacity = 50
+// Expected: exactly 50 succeed (201), 50 fail (409 TICKET_SOLD_OUT)
+// Zero orders with quantity > available. Zero DB constraint violations.
+
+export default function () {
+  const res = http.post('/api/v1/reservations', JSON.stringify({
+    ticket_type_id: __ENV.TICKET_TYPE_ID,
+    quantity: 1,
+  }), { headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${__ENV.TOKEN}` } });
+
+  check(res, {
+    'status is 201 or 409': (r) => r.status === 201 || r.status === 409,
+    'no 500 errors': (r) => r.status !== 500,
+  });
+}</pre>
+
+    <div class="callout callout-warn">
+      <span class="callout-icon">!</span>
+      <span>Do not launch to any real users until the k6 concurrent reservation test passes with zero oversells and zero 500 errors across 10 runs. This is the single most important quality gate in the entire project.</span>
+    </div>
+  </div>
+
+
+  <!-- ============================
+       08 · OBSERVABILITY
+  ============================= -->
+  <div class="doc-section" id="observability">
+    <div class="section-eyebrow">08 — Monitoring & Observability</div>
+    <div class="section-title">Monitoring & Observability Plan</div>
+
+    <h3>Observability stack</h3>
+    <div class="stack-grid">
+      <div class="stack-card"><div class="stack-concern">Error tracking</div><div class="stack-choice">Sentry</div><div class="stack-why">Frontend + API errors. Source maps. Release tracking</div></div>
+      <div class="stack-card"><div class="stack-concern">Structured logging</div><div class="stack-choice">Axiom</div><div class="stack-why">JSON log ingestion. Query with APL. Vercel integration</div></div>
+      <div class="stack-card"><div class="stack-concern">Uptime monitoring</div><div class="stack-choice">Better Uptime</div><div class="stack-why">HTTP checks every 3 min. Status page. Incident alerts</div></div>
+      <div class="stack-card"><div class="stack-concern">DB monitoring</div><div class="stack-choice">Neon dashboard</div><div class="stack-why">Query performance, connection pool saturation, storage</div></div>
+      <div class="stack-card"><div class="stack-concern">Queue monitoring</div><div class="stack-choice">BullMQ / Upstash console</div><div class="stack-why">Job failure rates, queue depth, worker health</div></div>
+      <div class="stack-card"><div class="stack-concern">Analytics</div><div class="stack-choice">Vercel Analytics</div><div class="stack-why">Page views, Core Web Vitals, geography breakdown</div></div>
+    </div>
+
+    <h3>Structured log schema</h3>
+    <p>Every log line from the API must include these fields. Use a logger wrapper around <code>console.log</code> in production to enforce structure.</p>
+    <pre>{
+  "timestamp": "2025-09-14T11:23:00.000Z",
+  "level": "info",                    // debug | info | warn | error
+  "service": "order-service",         // which service/module
+  "event": "order.confirmed",         // what happened — dot-namespaced
+  "traceId": "abc123",               // correlate across logs for one request
+  "userId": "usr_xxx",               // always redacted in error logs
+  "orgId": "org_xxx",
+  "durationMs": 142,
+  "meta": {                          // event-specific fields
+    "orderId": "ord_xxx",
+    "psp": "paystack",
+    "amount_kobo": 500000
+  }
+}</pre>
+
+    <h3>Alerts — what to alert on and when</h3>
+    <table>
+      <thead><tr><th>Signal</th><th>Threshold</th><th>Channel</th><th>Urgency</th></tr></thead>
+      <tbody>
+        <tr><td>API error rate (5xx)</td><td>&gt;1% of requests in 5min window</td><td>Slack + SMS</td><td>Page immediately</td></tr>
+        <tr><td>Webhook delivery failure</td><td>Any Stripe/Paystack webhook fails 3x retry</td><td>Slack</td><td>Urgent — revenue at risk</td></tr>
+        <tr><td>Reservation expiry job failure</td><td>Any job in dead-letter queue</td><td>Slack</td><td>Urgent — inventory stuck</td></tr>
+        <tr><td>DB connection pool saturation</td><td>&gt;90% of pooler connections in use</td><td>Slack</td><td>Warning — scale risk</td></tr>
+        <tr><td>p95 API latency</td><td>&gt;500ms sustained for 10min</td><td>Slack</td><td>Warning</td></tr>
+        <tr><td>Uptime check failure</td><td>2 consecutive failed checks (/api/health)</td><td>Slack + SMS</td><td>Page immediately</td></tr>
+        <tr><td>Auth failure spike</td><td>&gt;50 auth failures / minute per IP</td><td>Slack</td><td>Warning — potential brute force</td></tr>
+        <tr><td>Queue depth spike</td><td>&gt;500 pending jobs</td><td>Slack</td><td>Warning — worker falling behind</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Health check endpoint</h3>
+    <pre>// app/api/health/route.ts
+export async function GET() {
+  const checks = {
+    db: await checkDatabase(),   // SELECT 1 with 2s timeout
+    queue: await checkQueue(),   // Upstash PING
+    timestamp: new Date().toISOString(),
+  };
+  const healthy = Object.values(checks).every(c => c !== 'error');
+  return Response.json(checks, { status: healthy ? 200 : 503 });
+}</pre>
+
+    <h3>Runbook: ticket oversell incident</h3>
+    <p>If a DB constraint violation is ever logged (should never happen with correct implementation):</p>
+    <div class="flow-steps">
+      <div class="flow-step"><div class="flow-num">1</div><div><div class="flow-title">Immediately pause event ticket sales</div><div class="flow-body">PATCH /events/:id with status: 'cancelled'. Prevents further orders while investigating.</div></div></div>
+      <div class="flow-step"><div class="flow-num">2</div><div><div class="flow-title">Query actual state</div><div class="flow-body"><span class="flow-code">SELECT id, capacity, reserved, sold, (capacity - reserved - sold) AS remaining FROM ticket_types WHERE event_id = $id</span></div></div></div>
+      <div class="flow-step"><div class="flow-num">3</div><div><div class="flow-title">Reconcile orders vs inventory</div><div class="flow-body">Compare confirmed order count with <code>sold</code> counter. Any discrepancy indicates a counter drift bug.</div></div></div>
+      <div class="flow-step"><div class="flow-num">4</div><div><div class="flow-title">Contact affected purchasers</div><div class="flow-body">Email all confirmed-order attendees within 1 hour. Offer full refund or waitlist position. Do not wait for them to discover the issue.</div></div></div>
+      <div class="flow-step"><div class="flow-num">5</div><div><div class="flow-title">Root cause analysis + postmortem</div><div class="flow-body">Write a public (or at minimum documented) postmortem. What broke, when, why, what was done, what prevents recurrence.</div></div></div>
+    </div>
+
+    <h3>Disaster recovery</h3>
+    <table>
+      <thead><tr><th>Scenario</th><th>Recovery action</th><th>RTO target</th></tr></thead>
+      <tbody>
+        <tr><td>Bad deployment</td><td>Vercel: revert to previous production deployment (one-click)</td><td>&lt;2 minutes</td></tr>
+        <tr><td>DB migration failure</td><td>Drizzle: rollback migration on Neon branch, verify, fix, redeploy</td><td>&lt;30 minutes</td></tr>
+        <tr><td>Neon DB outage</td><td>Neon backup restore to new project. Update connection string in Vercel env</td><td>&lt;1 hour</td></tr>
+        <tr><td>R2 outage</td><td>Event images unavailable — system functional. R2 has 99.999999999% durability</td><td>N/A — wait for Cloudflare</td></tr>
+        <tr><td>PSP outage (one rail)</td><td>Route all new checkouts to available PSP. Add banner to event pages</td><td>&lt;15 minutes</td></tr>
+        <tr><td>Queue worker down</td><td>Reservations accumulate. Restart worker on Railway. Jobs are durable in Redis</td><td>&lt;10 minutes</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-success">
+      <span class="callout-icon">✓</span>
+      <span>This documentation set is the build contract. Every code decision should trace back to a decision made here. When you deviate, update the doc — or document why you deviated. That discipline is what distinguishes senior engineering from writing features that work until they don't.</span>
+    </div>
+
+  </div>
+
+</main>
+
+<script>
+  const sections = document.querySelectorAll('.doc-section');
+  const links = document.querySelectorAll('nav a');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const id = entry.target.id;
+        const active = document.querySelector(`nav a[href="#${id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
